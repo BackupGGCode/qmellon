@@ -1,0 +1,6 @@
+for xfile  in ~/.xprofile.d/* ; do
+	[ -f "$xfile" ] && . "$xfile"
+done
+unset xfile
+
+

@@ -1,0 +1,71 @@
+!! Xft.dpi: 96
+! Xft.hinting: 1
+! Xft.antialias: 1
+! Xft.hintstyle: hintfull
+! Xft.rgba: 1
+
+!!!!!!!!!!!!!!!!!!!!!!!
+! URXVT configuration !
+!!!!!!!!!!!!!!!!!!!!!!!
+!URxvt.depth: 32
+URxvt.foreground: white
+URxvt.background: black
+URxvt.cursorColor: yellow
+URxvt.cursorColor2: blue
+URxvt.pointerColor: yellow
+URxvt.pointerColor2: blue
+!URxvt.jumpScroll: false
+URxvt.scrollColor: #a2bde2
+!URxvt.troughColor: #dadce4
+URxvt*tintColor: #404040
+!URxvt*fadeColor: purple
+URxvt.fading: 20
+! URxvt*inheritPixmap: true
+URxvt.font: xft:Terminus:pixelsize=14:antialias=true
+URxvt.saveLines: 10000
+URxvt.mapAlert: true
+URxvt.scrollBar: true
+URxvt.scrollBar_right: true
+URxvt.scrollBar_floating: true
+! URxvt*pel-ext: tabbed
+! URxvt*perl-ext:automove-background
+URxvt.tabbed.tabbar-fg: 2
+URxvt.tabbed.tabbar-bg: background
+URxvt.tabbed.tab-fg:    10
+URxvt.tabbed.tab-bg:    81
+URxvt.scrollTtyOutput: true
+URxvt.path: /home/user/.wallpapers
+URxvt.backgroundPixmap: 1280x1024.jpg;0x0+0+0:root
+
+xine*font: xft:Terminus:pixelsize=14:antialias=true
+
+!!yeahconsole
+
+yeahconsole*term: urxvtc -pe tabbed
+yeahconsole*consoleHeight: 25
+yeahconsole*toggleKey: None+F12
+yeahconsole*keyFull: None+F11
+! yeahconsole*stepSize: 10
+! yeahconsole*aniDelay:120
+! yeahconsole*xOffset:0
+! yeahconsole*screenWidth:1280
+! yeahconsole*handleWidth:1
+! yeahconsole*handleColor: rgb:8/8/7
+! yeahconsole*handleColor.unfocus: rgb:4/4/38
+! !yeahconsole*font: -*-terminus-medium-*-*-*-12-*-*-*-*-*-*-*
+! !yeahconsole*font: -*-terminus-medium-*-*-*-*-*-100-100-*-*-iso8859-15
+! !yeahconsole*faceName: Terminus:pixelsize=10:antialias=true:hinting=true
+! yeahconsole*restart: 1
+! yeahconsole*loginShell: true
+! yeahconsole*savelines: 10000
+! yeahconsole*toolBar: false
+! yeahconsole*scrollWithBuffer: false 
+! yeahconsole*scrollTtyOutput: true
+! yeahconsole*scrollKey: true
+! yeahconsole*scrollTtyKeypress: true
+! yeahconsole*scrollstyle: plain
+! yeahconsole*jumpScroll: true
+! yeahconsole*skipScroll: true
+! yeahconsole*mouseWheelScrollPage: false
+
+Xcursor.theme: MyBlue

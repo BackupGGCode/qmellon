@@ -1,0 +1,3 @@
+#! /bin/bash
+
+/usr/bin/awesome -c ~/.config/awesome/krc.lua

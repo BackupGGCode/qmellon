@@ -1,0 +1,2 @@
+[[ -f ~/.functions ]] && . ~/.functions
+

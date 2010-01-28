@@ -1,0 +1,20 @@
+eless() {
+	local TEXT
+	until [ -z "$1" ]; do
+		if eix -eq "$1"; then 
+			less $(equery w "$1")
+		else
+			echo "Your request - $1 - did not match any packet"
+			echo "Did you mean \n$(eix --only-names $(qatom -q $1 | sed s/'\s*(null)\s*'//g | cut -d ' ' -f2))"
+		fi
+                shift
+	done
+}
+
+dless () {
+	dict $* | less
+}
+
+fixpdftext () {
+cat - | iconv -f utf8 -t iso-8859-1 | iconv -f cp1251 -t utf8
+}

@@ -1,0 +1,64 @@
+#!/bin/sh 
+ # -- truc -- lonn -- 
+ # This script launches a program (usually a game.. :P ) on an 
+ # other DISPLAY 
+ 
+ 
+ userresources=$HOME/.Xresources 
+ usermodmap=$HOME/.Xmodmap 
+ userxbindkeysrc=${HOME}/.xbindkeysrc 
+ xinitdir=/etc/X11 
+ sysresources=$xinitdir/Xresources 
+ sysmodmap=$xinitdir/Xmodmap 
+ serverargs="-nolisten tcp -br" 
+ DISPLAY_TO_USE=1 
+ 
+ 
+ 
+ PROG_NAME="$1" 
+ 
+ # since xinit need the full path of the program to run, we now search for it 
+ # in the PATH, if it is not found then it exits 
+ which "$PROG_NAME" &> /dev/null 
+ if [ "$?" -eq 0 ] 
+ then 
+     FULL_PROG_NAME=$(which "$PROG_NAME") 
+ else 
+     echo "Error: can't find $PROG_NAME in you PATH" 
+     exit 1 
+ fi 
+ 
+ shift
+  
+ case "${PROG_NAME}" in 
+ 
+     xlaunch) "The program can't call itself. Exiting!" 
+             exit 2 
+             ;; 
+ 
+     *)      xinit "${FULL_PROG_NAME}" $* -- :$DISPLAY_TO_USE $serverargs & 
+             ;; 
+ esac 
+ 
+ # Now we set/start some usefull things 
+ DISPLAY=:$DISPLAY_TO_USE xset m 7/10 1 
+ if [ -f $sysresources ]; then 
+     DISPLAY=:$DISPLAY_TO_USE xrdb -merge $sysresources 
+ fi 
+ if [ -f $sysmodmap ]; then 
+     DISPLAY=:$DISPLAY_TO_USE xmodmap $sysmodmap 
+ fi 
+ if [ -f $userresources ]; then 
+     DISPLAY=:$DISPLAY_TO_USE xrdb -merge $userresources 
+ fi 
+ if [ -f $usermodmap ]; then 
+     DISPLAY=:$DISPLAY_TO_USE xmodmap $usermodmap 
+ fi 
+ if [ -f $userxbindkeysrc ]; then 
+     DISPLAY=:$DISPLAY_TO_USE xbindkeys -f $userxbindkeysrc 
+ fi 
+ 
+ exit 0 
+ 
+   
+

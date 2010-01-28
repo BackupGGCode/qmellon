@@ -1,0 +1,46 @@
+#!/bin/sh
+
+alive() {
+    ps -C emerald
+    return $?
+}
+
+start() {
+    [[ $(pgrep kompmgr) ]] && killall -9 kompmgr
+    [[ $(pgrep kwin) ]] && killall -9 kwin
+    [[ $(pgrep compiz) ]] || compiz-start &
+    [[ $(pgrep kde-window-decorator) ]] && killall -9 kde-window-decorator
+#     [[ $(pgrep emerald) ]] && killall -9 emerald
+#     [[ $(pgrep beryl) ]] || beryl --replace &
+#    beryl --skip-gl-yield --use-copy --replace &
+    
+    sleep 2
+    
+    emerald --replace &
+}
+
+stop() {
+    killall -9 emerald
+    sleep 2
+    kde-window-decorator --replace &
+}
+
+case $1 in
+    --start)
+    start
+;;
+    --stop)
+    stop
+;;
+    --restart)
+    stop
+    start
+;;
+    *)
+        if alive; then
+                stop
+        else
+                start
+    fi
+;;
+esac

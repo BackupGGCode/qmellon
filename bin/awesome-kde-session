@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Run KDE with Awesome as its window manager
+export KDEWM='/usr/local/bin/kawesome'
+exec startkde $@

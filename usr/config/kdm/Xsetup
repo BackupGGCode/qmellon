@@ -1,0 +1,7 @@
+#! /bin/sh
+# Xsetup - run as root before the login dialog appears
+
+#xconsole -geometry 480x130-0-0 -notify -verbose -fn fixed -exitOnFail -file /dev/xconsole &
+
+/usr/lib/misc/xscreensaver/hyperspace -r &
+true

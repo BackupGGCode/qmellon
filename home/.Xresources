@@ -1,0 +1,5 @@
+yeahconsole*term: urxvtc -pe tabbed
+yeahconsole*consoleHeight: 25
+yeahconsole*toggleKey: None+F12
+yeahconsole*keyFull: None+F11
+
