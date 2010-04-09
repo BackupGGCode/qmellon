@@ -7,7 +7,8 @@ require("beautiful")
 -- Notification library
 require("naughty")
 
-require ("awful.remote")
+require("awful.remote")
+require("scratch")
 
 -- {{{ Functions
 -- Autostart function
@@ -39,7 +40,7 @@ theme_path = awful.util.getdir("config") .. "/themes/my"
 beautiful.init(theme_path .. "/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "urxvt"
+terminal = "urxvtc"
 -- editor = os.getenv("EDITOR") or "nano"
 -- editor_cmd = terminal .. " -e " .. editor
 editor = "kate"
@@ -51,6 +52,11 @@ editor_cmd = editor
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
+
+-- Transparency settings (make unfocussed clients transparent)
+focus_trans = true
+opacity_normal = 0.93
+opacity_focus = 1
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
@@ -258,7 +264,6 @@ globalkeys = awful.util.table.join(
 
     -- Prompt
     awful.key({ modkey },            "F1",     function () mypromptbox[mouse.screen]:run() end),
-
     awful.key({ modkey }, "F4",
               function ()
                   awful.prompt.run({ prompt = "Run Lua code: " },
@@ -331,12 +336,17 @@ clientbuttons = awful.util.table.join(
 globalkeys = awful.util.table.join(globalkeys,
     awful.key({ "Control"         }, "Escape", function () awful.util.spawn("xkill") end),
     awful.key({ modkey, "Mod1"    }, "F1",     function () awful.util.spawn("dmenu_run -p 'Run:' -nb '#1C5F95' -nf '#A0D3FF' -sb '#2A7FC0' -sf '#FFFFFF'") end),
-    -- Screen lock
-    awful.key({ modkey, "Control" }, "F12",    function () awful.util.spawn('xscreensaver-command -lock') end)
+    -- Scratch
+    awful.key({ }, "F12", function () scratch.drop("urxvtc -pe tabbed -e screen -D -R -c ~/.screenrc-urxvt &> /dev/null", "top", "center", 1, 0.35, true, 1) end),
+    awful.key({ modkey, "Control" }, "F12", function () scratch.pad.toggle() end),
+    -- Screen lock on Break key
+    awful.key({ modkey }, "#110",    function () awful.util.spawn('/usr/lib/kde4/libexec/kscreenlocker --forcelock') end)
 )
 
 clientkeys = awful.util.table.join(clientkeys,
-    awful.key({ "Mod1" }, "F4", function (c) c:kill() end))
+    awful.key({ "Mod1" }, "F4", function (c) c:kill() end),
+    -- Scratch
+    awful.key({ modkey, "Mod1" }, "F12", function (c) scratch.pad.set(c, 0.60, 0.60, true) end)
 
 -- Set keys
 root.keys(globalkeys)
@@ -350,7 +360,8 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-                     buttons = clientbuttons } },
+                     buttons = clientbuttons,
+                     size_hints_honor = false } },
     { rule = { class = "MPlayer" },
       properties = { floating = true } },
     { rule = { class = "pinentry" },
@@ -366,9 +377,9 @@ awful.rules.rules = {
     { rule = { class = "Yakuake" },
       properties = { floating = true } },
     { rule = { class = "Conky" },
---      properties = { floating = true } },
+     properties = { floating = true } },
 --    { rule = { class = "Toplevel" },
-      properties = { floating = true } },
+--       properties = { floating = true } },
     { rule = { class = "splash" },
       properties = { floating = true } },
     { rule = { class = "Plasma" },
@@ -377,6 +388,12 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "konqueror" },
       properties = { floating = true } },
+    { rule = { class = "Dialog" },
+      callback = awful.placement.centered },
+    { rule = { class = "Menu" },
+      callback = awful.placement.no_offscreen },
+--     { rule = { class = "Balloon" },
+--       callback = awful.placement.no_offscreen },
 -- Set Firefox to always map on tags number 2 of screen 1.
     { rule = { class = "Firefox" },
       properties = { tag = tags[1][3] } },
@@ -386,9 +403,9 @@ awful.rules.rules = {
       properties = { tag = tags[1][1] } },
     { rule = { class = "Tkabber" },
       properties = { tag = tags[1][2] } },
-    { rule = { class = "Chrome" },
-      properties = { tag = tags[1][2] } },
     { rule = { class = "Toplevel" },
+      properties = { tag = tags[1][2] } },
+    { rule = { class = "Chrome" },
       properties = { tag = tags[1][2] } },
     { rule = { class = "Seamonkey-bin" },
       properties = { tag = tags[1][3] } },
@@ -400,7 +417,7 @@ awful.rules.rules = {
       properties = { tag = tags[1][6] } },
     { rule = { class = "tvtime" },
       properties = { tag = tags[1][7] } },
-    { rule = { class = "gimp" },
+    { rule = { class = "Gimp*" },
       properties = { tag = tags[1][8] } },
     { rule = { class = "Amarokapp" },
       properties = { tag = tags[1][10] } },
@@ -434,14 +451,24 @@ client.add_signal("manage", function (c, startup)
             awful.placement.no_offscreen(c)
         end
     end
-
-    -- Honor size hints
-    c.size_hints_honor = false
-
 end)
 
-client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+-- client.add_signal("focus", function(c) c.border_color = beautiful.border_focus end)
+-- client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
+
+client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
+    -- decrease transparency
+    if focus_trans then
+        c.opacity = opacity_focus
+    end
+end)
+client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal
+    -- Increase transparency
+    if focus_trans then
+        c.opacity = opacity_normal
+    end
+end)
+
 -- }}}
 
 -- Run autostart applications
