@@ -1,0 +1,211 @@
+#! /bin/bash
+
+# Hello
+# This script activates or deactivates the Multi-Pointer X
+# Author: Mellon (qmellon at gmail dot com)
+# License: GPL-3
+# Usage: mpx [--start|--stop|--restart]
+
+# Primary keyboard
+: ${PKEYBOARD:="HID 04f3:0103"}
+
+# Primary pointer
+: ${PPOINTER:="Logitech USB Optical Mouse"}
+
+# Ignore keyboard pointers
+: ${IKPOINTER:="1"}
+
+# Uncomment this to enable simple debug
+# DEBUG="1"
+
+# Get array of names of keyboards and pointers
+IFS_OLD="${IFS}"
+IFS="
+"
+KEYBOARDS=( $(xinput list | grep -v "XTEST" | grep -P "slave\s*keyboard" | sed s/'.*↳ '/''/ | sed s/'\s*id=.*'/''/) )
+POINTERS=( $(xinput list | grep -v "XTEST" | grep -P "slave\s*pointer" | sed s/'.*↳ '/''/ | sed s/'\s*id=.*'/''/) )
+[[ -n "${DEBUG}" ]] && {
+	echo "KEYBOARDS=( ${KEYBOARDS[*]} )"
+	echo "POINTERS=( ${POINTERS[*]} )"
+}
+IFS="${IFS_OLD}"
+
+
+# Check primary devices existence
+if ! echo " ${POINTERS[@]}" | grep -q "${PPOINTER}"; then
+	echo "Primary pointer ${PPOINTER} is absent"
+	echo 'or does not set correectly, like'
+	echo "export PPOINTER=\"${POINTERS[0]}\""
+	echo 'in environment of shell.'
+	echo 'You have following pointers:'
+	for (( i = 0 ; i < ${#POINTERS[@]} ; i++ )); do
+		echo "${POINTERS[${i}]}"
+	done
+	exit 1
+fi
+if ! echo " ${KEYBOARDS[@]}" | grep -q "${PKEYBOARD}"; then
+        echo "Primary keyboard ${PKEYBOARD} is absent"
+        echo 'or does not set correectly, like'
+        echo "export PKEYBOARD=\"${KEYBOARDS[0]}\""
+        echo 'in environment of shell.'
+	echo 'You have following keyboards:'
+	for (( i = 0 ; i < ${#KEYBOARDS[@]} ; i++ )); do
+		echo "${KEYBOARDS[${i}]}"
+	done
+	exit 1
+fi
+
+getid() {
+grep -Po 'id=\d*' | cut -d'=' -f2
+}
+
+# Create array of devids
+KEYBOARDSID=( $(xinput list | grep -v "XTEST\|${PKEYBOARD}" | grep -P "slave\s*keyboard" | getid) )
+POINTERSID=( $(xinput list | grep -v "XTEST\|${PPOINTER}" | grep -P "slave\s*pointer" | getid) )
+[[ -n "${DEBUG}" ]] && {
+	echo "KEYBOARDSID=( ${KEYBOARDSID[*]} )"
+	echo "POINTERSID=( ${POINTERSID[*]} )"
+}
+
+if [[ "x${IKPOINTER}" == "x1" ]]; then
+	for (( i = 0 ; i < ${#KEYBOARDS[@]} ; i++ )); do
+		if KPOINTERID="$(xinput list | grep -P "${KEYBOARDS[${i}]}.+slave\s*pointer" | getid)"; then
+			POINTERSID=( ${POINTERSID[@]#${KPOINTERID}} )
+		fi
+	done
+fi
+
+[[ -n "${DEBUG}" ]] && echo "POINTERSID=( ${POINTERSID[@]} )"
+
+alive() {
+	(( ${#POINTERS[@]} > 1 )) && xinput list | grep -Pq 'New\d*\s*pointer.*master\s*pointer'
+	return $?
+}
+
+alivekbd() {
+	(( ${#KEYBOARDS[@]} > 1 )) && xinput list | grep -Pq 'New\d*\s*keyboard.*master\s*keyboard'
+	return $?
+}
+
+# Get counts of existing new master devices
+getcnpid() {
+xinput list | grep -Pc 'New\d*\s*pointer.*master\s*pointer'
+}
+getcnkid() {
+xinput list | grep -Pc 'New\d*\s*keyboard.*master\s*keyboard'
+}
+
+# Get existing ids
+getexid() {
+	# New pointers ids
+	NPOINTERSID=( $(xinput list | grep -P 'New\d*\s*pointer.*master\s*pointer' | getid) )
+	# Pointers id already reattached to new masters
+	APOINTERSID=( $(for i in ${NPOINTERSID[@]}; do \
+		xinput list $i | grep -m1 "Class originated from" | awk '{print $4}'; done) )
+	# Unused pointers
+	UPOINTERSID=( ${POINTERSID[@]} )
+	if [[ -n "${APOINTERSID[@]}" ]]; then
+		for (( i = 0 ; i < ${#APOINTERSID[@]} ; i++ )); do
+			UPOINTERSID=( ${UPOINTERSID[@]#${APOINTERSID[${i}]}} )
+		done
+	fi
+	# New keyboards ids
+	NKEYBOARDSID=( $(xinput list | grep -P 'New\d*\s*keyboard.*master\s*keyboard' | getid) )
+	# Keyboards id already reattached to new masters
+	AKEYBOARDSID=( $(for i in ${NKEYBOARDSID[@]}; do \
+		xinput list $i | grep -m1 "Class originated from" | awk '{print $4}'; done) )
+	# Unused keyboards
+	UKEYBOARDSID=( ${KEYBOARDSID[@]} )
+	if [[ -n "${AKEYBOARDSID[@]}" ]]; then
+		for (( i = 0 ; i < ${#AKEYBOARDSID[@]} ; i++ )); do
+			UKEYBOARDSID=( ${UKEYBOARDSID[@]#${AKEYBOARDSID[${i}]}} )
+		done
+	fi
+	[[ -n "${DEBUG}" ]] && {
+		echo "NPOINTERSID=( ${NPOINTERSID[@]} )"
+		echo "APOINTERSID=( ${APOINTERSID[@]} )"
+		echo "UPOINTERSID=( ${UPOINTERSID[@]} )"
+		echo "NKEYBOARDSID=( ${NKEYBOARDSID[@]} )"
+		echo "AKEYBOARDSID=( ${AKEYBOARDSID[@]} )"
+		echo "UKEYBOARDSID=( ${UKEYBOARDSID[@]} )"
+	}
+}
+
+start() {
+	if (( ${#POINTERSID[@]} > $(getcnpid) )); then
+		getexid
+		# i is equal to major name-count of already existing new master pointers
+		i="$(xinput list | grep -Po 'New\d*\s*pointer' | grep -Po '\d*' | sort -nr | head -n1)"
+		[[ -n "${i}" ]] || i=1
+		k=0
+		while  (( ${#POINTERSID[@]} > $(getcnpid) )); do
+			xinput create-master "New${i}"
+			[[ -n "${DEBUG}" ]] && {
+				echo "xinput create-master New${i}"
+			}
+			xinput reattach ${UPOINTERSID[${k}]} $(xinput list | grep -P "New${i}\s*pointer" | getid)
+			[[ -n "${DEBUG}" ]] && {
+				echo "xinput reattach ${UPOINTERSID[${k}]} $(xinput list | grep -P "New${i}\s*pointer" | getid)"
+			}
+			if (( ${#KEYBOARDSID[@]} >= $(getcnkid) )); then
+				xinput reattach ${UKEYBOARDSID[${k}]} $(xinput list | grep -P "New${i}\s*keyboard" | getid)
+				[[ -n "${DEBUG}" ]] && {
+					echo "xinput reattach ${UKEYBOARDSID[${k}]} $(xinput list | grep -P "New${i}\s*keyboard" | getid)"
+				}
+			fi
+			(( k++ ))
+			(( i++ ))
+		done
+	else
+		echo "All pointers already used"
+		exit 1
+	fi
+}
+
+stop() {
+	if alive ; then
+		getexid
+		for i in ${POINTERSID[@]}; do
+			xinput reattach ${i} $(xinput list | grep -P 'Virtual\s*core\s*pointer.*master\s*pointer' | getid)
+			[[ -n "${DEBUG}" ]] && {
+				echo "xinput reattach ${i} $(xinput list | grep -P 'Virtual\s*core\s*pointer.*master\s*pointer' | getid)"
+			}
+		done
+		if alivekbd ; then
+			for i in ${KEYBOARDSID[@]}; do
+				xinput reattach ${i} $(xinput list | grep -P 'Virtual\s*core\s*keyboard.*master\s*keyboard' | getid)
+				[[ -n "${DEBUG}" ]] && {
+					echo "xinput reattach ${i} $(xinput list | grep -P 'Virtual\s*core\s*keyboard.*master\s*keyboard' | getid)"
+				}
+			done
+		fi
+		for i in ${NPOINTERSID[@]}; do
+			xinput remove-master ${i}
+			[[ -n "${DEBUG}" ]] && {
+				echo "xinput remove-master ${i}"
+			} || :
+		done
+	else
+	echo "already stoped"
+	exit 1
+    fi
+}
+
+case $1 in
+    --start)
+    start
+;;
+    --stop)
+    stop
+;;
+    --restart)
+    stop
+    start
+;;
+    *)
+        if alive; then
+                stop
+        else
+                start
+    fi
+esac
