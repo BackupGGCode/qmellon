@@ -26,14 +26,5 @@ return 1
 zstyle ':completion:*' completer _expand _force_rehash _complete _ignored _approximate
 zstyle ':completion:predict:*' completer _force_rehash _complete
 
-_packages () {
-    if compset -P '(\\|)(>=|<=|<|>|=)'  ; then
-            _gentoo_packages ${*/(#m)(installed|available)/${MATCH}_versions}
-    else
-            _gentoo_packages $*
-    fi
-}
-
-if [[ "x$service" == "xeless" ]]; then
-	_arguments ':portage:_packages available'
-fi
+compdef "_gentoo_packages available" eless
+compdef "_dict_words" dless
