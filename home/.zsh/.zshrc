@@ -1,6 +1,6 @@
 #! /bin/zsh
 # Search path for the cd command
-cdpath=(.. / ~ ~/MyDocuments /mnt)
+cdpath=(.. / ~ ~/MyDocuments ~/MyDocuments/e/unix ~/MyDocuments/e/unix/linux /mnt /mnt/storage)
 
 
 if [ "$TERM" = "xterm" ]; then

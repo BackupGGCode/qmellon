@@ -2,13 +2,6 @@
 
 # Enable colors for ls completion, etc
 # LS_COLORS=`eval dircolors`
-
-if [[ -f ~/.dir_colors ]]; then
-        eval `dircolors -b ~/.dir_colors`
-        else
-        eval `dircolors -b /etc/DIR_COLORS`
-fi
-                                
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 
 # ROOTPATH for sudo

@@ -1,4 +1,3 @@
 ZDOTDIR="$HOME/.zsh"
 DIRSTACKSIZE=20
-HISTFILE="$HOME/.history"
-
+MAIL=/var/spool/mail/$USERNAME

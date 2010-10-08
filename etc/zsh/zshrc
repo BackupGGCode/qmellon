@@ -1,6 +1,9 @@
 #! /bin/zsh
 
-umask 022
+#
+# Load profile
+#
+source /etc/zsh/zprofile
 
 # Search path for the cd command
 cdpath=(.. ~ / /etc)
@@ -10,11 +13,6 @@ cdpath=(.. ~ / /etc)
 # limit stack 8192
 # limit core 0
 # limit -s
-
-#
-# Load local options
-#
-source /etc/profile.d/local.sh
 
 #
 # Load options
@@ -47,7 +45,7 @@ setenv() { typeset -x "${1}${1:+=}${(@)argv[2,$#]}" }  # csh compatibility
 freload() { while (( $# )); do; unfunction $1; autoload -U $1; shift; done }
 
 # Where to look for autoloaded function definitions
-fpath=($fpath ~/.zfunc)
+fpath=($fpath ~/.zsh/zfunc)
 
 # Autoload all shell functions from all directories in $fpath (following
 # symlinks) that have the executable bit on (the executable bit is not
@@ -58,73 +56,13 @@ for func in $^fpath/*(N-.x:t); autoload $func
 # automatically remove duplicates from these arrays
 typeset -U path cdpath fpath manpath
 
-# manpath=($X11HOME/man /usr/man /usr/lang/man /usr/local/man)
-# export MANPATH
-
 # # Hosts to use for completion (see later zstyle)
 # hosts=(`hostname` ftp.math.gatech.edu prep.ai.mit.edu wuarchive.wustl.edu)
-
-# # Some environment variables
-export MAIL=/var/spool/mail/$USERNAME
-# export LESS=-cex3M
-export HELPDIR=/usr/local/lib/zsh/help  # directory for run-help function to find docs
-
-# MAILCHECK=300
-# 
-# # Watch for my friends
-# #watch=( $(<~/.friends) )       # watch for people in .friends file
-# watch=(notme)                   # watch for everybody but me
-# LOGCHECK=300                    # check every 5 min for login/logout activity
-# WATCHFMT='%n %a %l from %m at %t.'
 
 #
 # Functions
 #
-#
-src () {
-   autoload -U zrecompile
-   [ -f ~/.zsh/.zshrc ] && zrecompile -p ~/.zsh/.zshrc
-   [ -f ~/.zsh/.zcompdump ] && zrecompile -p ~/.zsh/.zcompdump
-   for x in $(find ~/.zsh/ -type f -name "*.zsh"); do
-   	zrecompile -p "${x}"
-   done
-   unset x
-#   [ -f ~/.zsh/.zshrc.zwc.old ] && rm -f ~/.zsh/.zshrc.zwc.old
-#   [ -f ~/.zsh/.zcompdump.zwc.old ] && rm -f ~/.zsh/.zcompdump.zwc.old
-   find ~/.zsh/ -name "*.zwc.old" -exec rm -f {} \;
-   source ~/.zsh/.zshrc
-}
-
-
-function precmd() {
-if [ "$DCOP_YAKUAKE_SESSION" ]
-then
-	dcop yakuake DCOPInterface slotRenameSession $DCOP_YAKUAKE_SESSION "${USER}@${$(hostname)%%.*}:${PWD/$HOME/~}"
-fi
-}
-
-function title() {
-# escape ‘%’ chars in $1, make nonprintables visible
-a=${(V)1//\%/\%\%}
-
-# Truncate command, and join lines.
-a=$(print -Pn "%40>…>$a" | tr -d "\n")
-
-case $TERM in
-    screen)
-    print -Pn "\e]2;$a @ $2\a" # plain xterm title
-    print -Pn "\ek$a\e\\" # screen title (in ^A")
-    print -Pn "\e_$2 \e\\" # screen location
-    ;;
-    xterm*|rxvt)
-    print -Pn "\e]2;$a @ $2\a" # plain xterm title
-    ;;
-esac
-}
-
-function preexec() {
-title "$1" "%m(%35<…<%~)"
-}
+source /etc/zsh/functions.zsh
 
 #
 # Load binds
