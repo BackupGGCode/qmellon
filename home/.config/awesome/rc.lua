@@ -6,36 +6,41 @@ require("awful.rules")
 require("beautiful")
 -- Notification library
 require("naughty")
-
+-- Libraries defined by user
 require("awful.remote")
 require("scratch")
-
--- {{{ Functions
--- Autostart function
-function autostart(dir)
-    if not dir then
-        do return nil end
-    end
-    local fd = io.popen("ls -1 -F " .. dir)
-    if not fd then
-        do return nil end
-    end
-    for file in fd:lines() do
-        local c= string.sub(file,-1)   -- last char
-        executable = string.sub( file, 1,-2 )
-        print("Awesome Autostart: Executing: " .. executable)
-        os.execute(dir .. "/" .. executable .. " &") -- launch in bg
-    end
-    io.close(fd)
-end
--- }}}
 
 -- Set locale
 os.setlocale(os.getenv("LANG"))
 
+-- {{{ Error handling
+-- Check if awesome encountered an error during startup and fell back to
+-- another config (This code will only ever execute for the fallback config)
+if awesome.startup_errors then
+    naughty.notify({ preset = naughty.config.presets.critical,
+                     title = "Oops, there were errors during startup!",
+                     text = awesome.startup_errors })
+end
+
+-- Handle runtime errors after startup
+do
+    local in_error = false
+    awesome.add_signal("debug::error", function (err)
+        -- Make sure we don't go into an endless error loop
+        if in_error then return end
+        in_error = true
+        naughty.notify({ preset = naughty.config.presets.critical,
+                         title = "Oops, an error happened!",
+                         text = err })
+        in_error = false
+    end)
+end
+-- }}}
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 theme_path = awful.util.getdir("config") .. "/themes/my"
+-- theme_path = "/usr/share/awesome/themes/default/theme.lua"
 -- theme_path = "/usr/share/awesome/themes/zenburn"
 beautiful.init(theme_path .. "/theme.lua")
 
@@ -43,7 +48,7 @@ beautiful.init(theme_path .. "/theme.lua")
 terminal = "urxvtc"
 -- editor = os.getenv("EDITOR") or "nano"
 -- editor_cmd = terminal .. " -e " .. editor
-editor = "kate"
+editor = "xdg-open"
 editor_cmd = editor
 
 -- Default modkey.
@@ -81,17 +86,17 @@ layouts =
 tags = {}
 tags.setup = {
     { name = "Kct",  layout = layouts[1]  },
-    { name = "Tka", layout = layouts[3]  },
-    { name = "FFx",   layout = layouts[1]  },
-    { name = "Kor",  layout = layouts[1]  },
-    { name = "Kru",    layout = layouts[1],  },
-    { name = "Ktr",     layout = layouts[1],  },
-    { name = "Tvt",     layout = layouts[1],  },
-    { name = "Gmp",   layout = layouts[1]  },
-    { name = "9", layout = layouts[1]  },
-    { name = "10", layout = layouts[1]  },
-    { name = "11", layout = layouts[1]  },
-    { name = "Skp", layout = layouts[1]  }
+    { name = "IM", layout = layouts[3]  },
+    { name = "Web",   layout = layouts[1]  },
+    { name = "RSS",  layout = layouts[1]  },
+    { name = "FM",    layout = layouts[1],  },
+    { name = "P2P",     layout = layouts[1],  },
+    { name = "Vid",     layout = layouts[1],  },
+    { name = "Img",   layout = layouts[1]  },
+    { name = "Snd", layout = layouts[1]  },
+    { name = "VM", layout = layouts[1]  },
+    { name = "Txt", layout = layouts[1]  },
+    { name = "VoN", layout = layouts[1]  }
 }
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
@@ -102,15 +107,19 @@ for s = 1, screen.count() do
         awful.tag.setproperty(tags[s][i], "layout", t.layout)
     end
     tags[s][1].selected = true
---     tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s)
+--    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
 end
+-- }}}
+
+-- {{{ Load user  widgets
+dofile(awful.util.getdir("config") .. "/kbd.lua")
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
    { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awful.util.getdir("config") .. "/rc.lua" },
+   { "edit config", editor_cmd .. " " .. awesome.conffile },
    { "restart", awesome.restart },
    { "quit", awesome.quit }
 }
@@ -147,11 +156,17 @@ mytaglist.buttons = awful.util.table.join(
 mytasklist = {}
 mytasklist.buttons = awful.util.table.join(
                      awful.button({ }, 1, function (c)
-                                              if not c:isvisible() then
-                                                  awful.tag.viewonly(c:tags()[1])
+                                              if c == client.focus then
+                                                  c.minimized = true
+                                              else
+                                                  if not c:isvisible() then
+                                                      awful.tag.viewonly(c:tags()[1])
+                                                  end
+                                                  -- This will also un-minimize
+                                                  -- the client, if needed
+                                                  client.focus = c
+                                                  c:raise()
                                               end
-                                              client.focus = c
-                                              c:raise()
                                           end),
                      awful.button({ }, 3, function ()
                                               if instance then
@@ -201,6 +216,7 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         mytextclock,
+        s == 1 and kbdwidget or nil,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -232,7 +248,7 @@ globalkeys = awful.util.table.join(
             awful.client.focus.byidx(-1)
             if client.focus then client.focus:raise() end
         end),
-    awful.key({ modkey,           }, "w", function () mymainmenu:show(true)        end),
+    awful.key({ modkey,           }, "w", function () mymainmenu:show({keygrabber=true}) end),
 
     -- Layout manipulation
     awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end),
@@ -262,6 +278,8 @@ globalkeys = awful.util.table.join(
     awful.key({ modkey,           }, "space", function () awful.layout.inc(layouts,  1) end),
     awful.key({ modkey, "Shift"   }, "space", function () awful.layout.inc(layouts, -1) end),
 
+    awful.key({ modkey, "Control" }, "n", awful.client.restore),
+
     -- Prompt
     awful.key({ modkey },            "F1",     function () mypromptbox[mouse.screen]:run() end),
     awful.key({ modkey }, "F4",
@@ -280,7 +298,13 @@ clientkeys = awful.util.table.join(
     awful.key({ modkey, "Control" }, "Return", function (c) c:swap(awful.client.getmaster()) end),
     awful.key({ modkey,           }, "o",      awful.client.movetoscreen                        ),
     awful.key({ modkey, "Shift"   }, "r",      function (c) c:redraw()                       end),
-    awful.key({ modkey,           }, "n",      function (c) c.minimized = not c.minimized    end),
+    awful.key({ modkey,           }, "t",      function (c) c.ontop = not c.ontop            end),
+    awful.key({ modkey,           }, "n",
+        function (c)
+            -- The client currently has the input focus, so it cannot be
+            -- minimized, since minimized clients can't have the focus.
+            c.minimized = true
+        end),
     awful.key({ modkey,           }, "m",
         function (c)
             c.maximized_horizontal = not c.maximized_horizontal
@@ -332,12 +356,17 @@ clientbuttons = awful.util.table.join(
     awful.button({ modkey }, 1, awful.mouse.client.move),
     awful.button({ modkey }, 3, awful.mouse.client.resize))
 
--- My keybinfings
+-- My keybindngs
 globalkeys = awful.util.table.join(globalkeys,
     awful.key({ "Control"         }, "Escape", function () awful.util.spawn("xkill") end),
     awful.key({ modkey, "Mod1"    }, "F1",     function () awful.util.spawn("dmenu_run -p 'Run:' -nb '#1C5F95' -nf '#A0D3FF' -sb '#2A7FC0' -sf '#FFFFFF'") end),
+    awful.key({ modkey, "Mod1"    }, "1",     function () os.execute(kbd_dbus_cmd .. "0") end),
+    awful.key({ modkey, "Mod1"    }, "2",     function () os.execute(kbd_dbus_cmd .. "1") end),
+    awful.key({ modkey, "Mod1"    }, "3",     function () os.execute(kbd_dbus_cmd .. "2") end),
+    awful.key({ modkey, "Mod1"    }, "4",     function () os.execute(kbd_dbus_cmd .. "3") end),
+    awful.key({  "Control"  }, "ISO_Level3_Shift",     function () os.execute(kbd_dbus_prev_cmd) end),
     -- Scratch
-    awful.key({ }, "F12", function () scratch.drop("urxvtc -pe tabbed -e screen -D -R -c ~/.screenrc-urxvt &> /dev/null", "top", "center", 1, 0.35, true, 1) end),
+    awful.key({ }, "F12", function () scratch.drop("urxvtc -pe tabbed -e screen -D -R -c /home/user/.screenrc-urxvt", "top", "center", 1, 0.37, true, 1) end),
     awful.key({ modkey, "Control" }, "F12", function () scratch.pad.toggle() end),
     -- Screen lock on Break key
     awful.key({ modkey }, "#110",    function () awful.util.spawn('xlock') end)
@@ -346,7 +375,15 @@ globalkeys = awful.util.table.join(globalkeys,
 clientkeys = awful.util.table.join(clientkeys,
     awful.key({ "Mod1" }, "F4", function (c) c:kill() end),
     -- Scratch
-    awful.key({ modkey, "Mod1" }, "F12", function (c) scratch.pad.set(c, 0.60, 0.60, true) end)
+    awful.key({ modkey, "Mod1" }, "F12", function (c) scratch.pad.set(c, 0.60, 0.60, true) end),
+    -- Info
+    awful.key({ modkey, "Mod1" }, "i",
+        function (c)
+            naughty.notify({ text =
+                "Class: " .. c.class ..
+                "\nInstance: " .. c.instance ..
+                "\nName: " .. c.name .."" })
+    end)
 )
 
 -- Set keys
@@ -367,35 +404,24 @@ awful.rules.rules = {
       properties = { floating = true } },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
---     { rule = { class = "gimp" },
---       properties = { floating = true } },
-    { rule = { class = "kdetv" },
-      properties = { floating = true } },
-    { rule = { class = "xdtv" },
-      properties = { floating = true } },
     { rule = { class = "tilda" },
       properties = { floating = true } },
     { rule = { class = "Yakuake" },
       properties = { floating = true } },
     { rule = { class = "Conky" },
      properties = { floating = true } },
---    { rule = { class = "Toplevel" },
---       properties = { floating = true } },
     { rule = { class = "splash" },
       properties = { floating = true } },
     { rule = { class = "Plasma" },
       properties = { floating = true } },
     { rule = { class = "Plasma-desktop" },
       properties = { floating = true } },
-    { rule = { class = "konqueror" },
+    { rule = { class = "Nepomukservicestub" },
       properties = { floating = true } },
     { rule = { class = "Dialog" },
       callback = awful.placement.centered },
     { rule = { class = "Menu" },
       callback = awful.placement.no_offscreen },
---     { rule = { class = "Balloon" },
---       callback = awful.placement.no_offscreen },
--- Set Firefox to always map on tags number 2 of screen 1.
     { rule = { class = "Firefox" },
       properties = { tag = tags[1][3] } },
     { rule = { class = "Kontact" },
@@ -406,24 +432,24 @@ awful.rules.rules = {
       properties = { tag = tags[1][2] } },
     { rule = { class = "Toplevel" },
       properties = { tag = tags[1][2] } },
-    { rule = { class = "Chrome" },
-      properties = { tag = tags[1][2] } },
+    { rule = { class = "Chromium-browser" },
+      properties = { tag = tags[1][3] } },
     { rule = { class = "Seamonkey-bin" },
       properties = { tag = tags[1][3] } },
     { rule = { class = "Konqueror" },
-      properties = { tag = tags[1][4] } },
+      properties = { tag = tags[1][3] } },
     { rule = { class = "Krusader" },
       properties = { tag = tags[1][5] } },
     { rule = { class = "Ktorrent" },
       properties = { tag = tags[1][6] } },
-    { rule = { class = "tvtime" },
+    { rule = { class = "xine" },
       properties = { tag = tags[1][7] } },
     { rule = { class = "Gimp*" },
       properties = { tag = tags[1][8] } },
     { rule = { class = "Amarokapp" },
       properties = { tag = tags[1][10] } },
     { rule = { class = "Skype" },
-      properties = { tag = tags[1][12] } },
+      properties = { tag = tags[1][12] } }
 }
 -- }}}
 
@@ -470,6 +496,26 @@ client.add_signal("unfocus", function(c) c.border_color = beautiful.border_norma
     end
 end)
 
+-- }}}
+
+-- {{{ Functions
+-- Autostart function
+function autostart(dir)
+    if not dir then
+        do return nil end
+    end
+    local fd = io.popen("ls -1 -F " .. dir)
+    if not fd then
+        do return nil end
+    end
+    for file in fd:lines() do
+        local c= string.sub(file,-1)   -- last char
+        executable = string.sub( file, 1,-2 )
+        print("Awesome Autostart: Executing: " .. executable)
+        os.execute(dir .. "/" .. executable .. " &") -- launch in bg
+    end
+    io.close(fd)
+end
 -- }}}
 
 -- Run autostart applications
