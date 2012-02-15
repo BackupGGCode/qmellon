@@ -9,7 +9,7 @@ kbd_img_path = "/usr/share/icons/kbflags/"
 -- }}}
 
 -- {{{ Keyboard layout widgets
---- Create the laucher widget and the menu
+--- Create a menu
 kbdmenu =awful.menu({ items = {  { "English", kbd_dbus_sw_cmd .. "0",  kbd_img_path .. "us.png" },
 	{ "Русский", kbd_dbus_sw_cmd .. "1", kbd_img_path .. "ru.png" },
 	{ "Hebrew", kbd_dbus_sw_cmd .. "2", kbd_img_path .. "il.png" },
