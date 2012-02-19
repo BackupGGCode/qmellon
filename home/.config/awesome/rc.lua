@@ -62,6 +62,15 @@ modkey = "Mod4"
 focus_trans = true
 opacity_normal = 0.93
 opacity_focus = 1
+opacity_toggle = 0.6
+opacity_step = 0.05
+
+
+-- Dynamic client properties table
+clienttable = {}
+
+-- Autostart apps directory
+autostart_dir = awful.util.getdir("config") .. "/autostart"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
 layouts =
@@ -79,6 +88,78 @@ layouts =
     awful.layout.suit.magnifier,
     awful.layout.suit.floating
 }
+-- }}}
+
+-- {{{ Functions
+-- Autostart function
+function autostart(dir)
+    if not dir then
+        do return nil end
+    end
+    local fd = io.popen("ls -1 -F " .. dir)
+    if not fd then
+        do return nil end
+    end
+    for file in fd:lines() do
+        local c= string.sub(file,-1)   -- last char
+        executable = string.sub( file, 1,-2 )
+        print("Awesome Autostart: Executing: " .. executable)
+        os.execute(dir .. "/" .. executable .. " &") -- launch in bg
+    end
+    io.close(fd)
+end
+
+-- Clients table managing
+ -- Create an entry in the client table
+function createctable(c)
+    if clienttable[c] == nil then
+        clienttable[c] = {}
+    end
+end
+function custom_trans_on(c)
+    createctable(c)
+    if not clienttable[c].custom_trans then
+        clienttable[c].custom_trans = true
+    end
+end
+
+-- setFg: put colored span tags around a text, useful for wiboxes
+function setFg(fg,s)
+    return "<span color=\"" .. fg .. "\">" .. s .."</span>"
+end
+colored_on = setFg("green", "on")
+colored_off = setFg("red", "off")
+
+-- Collect client infos
+function get_fixed_client_infos(c)
+    local txt = ""
+    if c.name then txt = txt .. setFg("white", "Name: ") .. c.name .. "\n" end
+    if c.pid then txt = txt .. setFg("white", "PID: ") .. c.pid .. "\n" end
+    if c.class then txt = txt .. setFg("white", "Class: ") .. c.class .. "\n" end
+    if c.instance then txt = txt .. setFg("white", "Instance: ") .. c.instance .. "\n" end
+    if c.role then txt = txt .. setFg("white", "Role: ") .. c.role .. "\n" end
+    if c.type then txt = txt .. setFg("white", "Type: ") .. c.type .. "\n" end
+    return txt
+end
+
+function get_dyn_client_infos(c)
+    local txt = ""
+    if c.screen then txt = txt .. setFg("white", "Screen: ") .. c.screen .. "\n" end
+    if awful.client.floating.get(c) then txt = txt .. setFg("white", "Floating: ") .. colored_on .. "\n" end
+    if c.ontop then txt = txt .. setFg("white", "On top: ") .. colored_on .. "\n" end
+    if c.fullscreen then txt = txt .. setFg("white", "Fullscreen: ") .. colored_on .. "\n" end
+    if c.titlebar then txt = txt .. setFg("white", "Titlebar: ") .. colored_on .. "\n" end
+    if c.opacity then txt = txt .. setFg("white", "Opacity: ") .. c.opacity .. "\n" end
+    if c.icon_path then txt = txt .. setFg("white", "Icon_path: ") .. c.icon_path .. "\n" end
+    return txt
+end
+
+-- Show some client infos in a naughy box
+function show_client_infos(c)
+    txt = get_fixed_client_infos(c)
+    txt = txt .. "\n" .. get_dyn_client_infos(c)
+    naughty.notify({ title = "Client info", text = txt, timeout = 6 })
+end
 -- }}}
 
 -- {{{ Tags
@@ -216,7 +297,7 @@ for s = 1, screen.count() do
         },
         mylayoutbox[s],
         mytextclock,
-        s == 1 and kbdwidget or nil,
+        kbdwidget,
         s == 1 and mysystray or nil,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
@@ -315,7 +396,8 @@ clientkeys = awful.util.table.join(
 -- Compute the maximum number of digit we need, limited to 9
 keynumber = 0
 for s = 1, screen.count() do
-   keynumber = math.min(9, math.max(#tags[s], keynumber));
+--    keynumber = math.min(9, math.max(#tags[s], keynumber));
+   keynumber = math.min(12, math.max(#tags[s], keynumber));
 end
 
 -- Bind all key numbers to tags.
@@ -359,7 +441,6 @@ clientbuttons = awful.util.table.join(
 -- My keybindngs
 globalkeys = awful.util.table.join(globalkeys,
     awful.key({ "Control"         }, "Escape", function () awful.util.spawn("xkill") end),
-    awful.key({ modkey, "Mod1"    }, "F1",     function () awful.util.spawn("dmenu_run -p 'Run:' -nb '#1C5F95' -nf '#A0D3FF' -sb '#2A7FC0' -sf '#FFFFFF'") end),
     awful.key({ modkey, "Mod1"    }, "1",     function () os.execute(kbd_dbus_sw_cmd .. "0") end),
     awful.key({ modkey, "Mod1"    }, "2",     function () os.execute(kbd_dbus_sw_cmd .. "1") end),
     awful.key({ modkey, "Mod1"    }, "3",     function () os.execute(kbd_dbus_sw_cmd .. "2") end),
@@ -369,7 +450,21 @@ globalkeys = awful.util.table.join(globalkeys,
     awful.key({ }, "F12", function () scratch.drop("urxvtc -pe tabbed -e screen -D -R -c /home/user/.screenrc-urxvt", "top", "center", 1, 0.37, true, 1) end),
     awful.key({ modkey, "Control" }, "F12", function () scratch.pad.toggle() end),
     -- Screen lock on Break key
-    awful.key({ modkey }, "#110",    function () awful.util.spawn('xlock') end)
+    awful.key({ modkey }, "#110",    function () awful.util.spawn('/usr/lib/kde4/libexec/kscreenlocker --forcelock') end),
+    -- Prompts 
+    awful.key({ modkey, "Mod1"    }, "F1",     function () awful.util.spawn("dmenu_run -p 'Run:' -nb '" .. beautiful.dmenu_bg_normal .. "' -nf '" .. beautiful.dmenu_bg_normal .. "' -sb '" .. beautiful.dmenu_bg_normal .. "' -sf '" .. beautiful.dmenu_fg_focus .. "'") end),
+    awful.key({ modkey ,    }, "F2", function ()
+                  local s = mouse.screen
+                  awful.prompt.run({ prompt = "Calc: " },
+                  mypromptbox[s].widget,
+                  function (expr)
+                        local result = awful.util.eval("return (" .. expr .. ")")
+--                         mypromptbox[s].widget.text = "Calc: " expr .. " = " .. result
+                        naughty.notify({ text = expr .. " = " .. result, timeout = 10, screen = s, position = "top_left" })
+                  end,
+                  nil,
+                  awful.util.getdir("cache") .. "/history_calc" )
+    end)
 )
 
 clientkeys = awful.util.table.join(clientkeys,
@@ -377,13 +472,60 @@ clientkeys = awful.util.table.join(clientkeys,
     -- Scratch
     awful.key({ modkey, "Mod1" }, "F12", function (c) scratch.pad.set(c, 0.60, 0.60, true) end),
     -- Info
-    awful.key({ modkey, "Mod1" }, "i",
-        function (c)
-            naughty.notify({ text =
-                "Class: " .. c.class ..
-                "\nInstance: " .. c.instance ..
-                "\nName: " .. c.name .."" })
-    end)
+    awful.key({ modkey, "Mod1" }, "i",  function (c) show_client_infos(c) end),
+    -- Opacity
+    awful.key({ modkey, "Mod1" }, "o",
+       function (c)
+            createctable(c)
+            if clienttable[c].custom_trans then
+                clienttable[c].custom_trans_value = c.opacity
+                c.opacity = opacity_focus
+                clienttable[c].custom_trans = false
+                if trans_notify then naughty.destroy(trans_notify) end
+                trans_notify = naughty.notify({ title = "Transparency",
+                text = "Custom transparency turned " .. colored_off,
+                screen = mouse.screen })
+            else
+                if clienttable[c].custom_trans_value then
+                     c.opacity = clienttable[c].custom_trans_value
+                else
+                     c.opacity = opacity_toggle
+                end
+                clienttable[c].custom_trans = true
+                if trans_notify then naughty.destroy(trans_notify) end
+                trans_notify = naughty.notify({ title = "Transparency",
+                text = "Custom transparency turned " .. colored_on
+                   .. " (" .. math.floor(100 - c.opacity*100) .. "%)",
+                screen = mouse.screen })
+            end
+       end)
+)
+
+clientbuttons = awful.util.table.join(clientbuttons,
+    awful.button({ modkey }, 4, function(c)
+            if c.opacity <= 1 - opacity_step then
+                c.opacity = c.opacity + opacity_step
+            else
+                c.opacity = 1
+            end
+            custom_trans_on(c)
+            if trans_notify then naughty.destroy(trans_notify) end
+            trans_notify = naughty.notify({ title = "Transparency",
+                text = "Custom transparency set to " .. math.floor(100 - c.opacity*100) .. "%",
+                screen = mouse.screen })
+        end),
+    awful.button({ modkey }, 5, function(c)
+            if c.opacity >= opacity_step then
+                c.opacity = c.opacity - opacity_step
+            else
+                c.opacity = 0
+            end
+            custom_trans_on(c)
+            if trans_notify then naughty.destroy(trans_notify) end
+            trans_notify = naughty.notify({ title = "Transparency",
+                text = "Custom transparency set to " .. math.floor(100 - c.opacity*100) .. "%",
+                screen = mouse.screen })
+        end)
 )
 
 -- Set keys
@@ -401,13 +543,37 @@ awful.rules.rules = {
                      buttons = clientbuttons,
                      size_hints_honor = false } },
     { rule = { class = "MPlayer" },
-      properties = { floating = true } },
+      properties = { floating = true, opacity = 1 },
+            callback = function(c)
+                  custom_trans_on(c)
+            end },
+    { rule = { class = "Smplayer" },
+      properties = { opacity = 1 },
+            callback = function(c)
+                  local s = mouse.screen t = 7
+                  awful.client.movetotag(tags[s][t], c)
+                  awful.tag.viewonly(tags[s][t])
+                  custom_trans_on(c)
+            end },
+    { rule = { class = "xine" },
+      properties = { opacity = 1 },
+            callback = function(c)
+                  local s = mouse.screen t = 7
+                  awful.client.movetotag(tags[s][t], c)
+                  awful.tag.viewonly(tags[s][t])
+                  custom_trans_on(c)
+            end },
     { rule = { class = "pinentry" },
       properties = { floating = true } },
     { rule = { class = "tilda" },
       properties = { floating = true } },
     { rule = { class = "Yakuake" },
       properties = { floating = true } },
+    { rule = { class = "URxvt" },
+      properties = { opacity = 0.85 },
+            callback = function(c)
+                  custom_trans_on(c)
+            end },
     { rule = { class = "Conky" },
      properties = { floating = true } },
     { rule = { class = "splash" },
@@ -427,7 +593,7 @@ awful.rules.rules = {
     { rule = { class = "Kontact" },
       properties = { tag = tags[1][1] } },
     { rule = { class = "Bilbo" },
-      properties = { tag = tags[1][1] } },
+      properties = { tag = tags[1][4] } },
     { rule = { class = "Tkabber" },
       properties = { tag = tags[1][2] } },
     { rule = { class = "Toplevel" },
@@ -442,8 +608,6 @@ awful.rules.rules = {
       properties = { tag = tags[1][5] } },
     { rule = { class = "Ktorrent" },
       properties = { tag = tags[1][6] } },
-    { rule = { class = "xine" },
-      properties = { tag = tags[1][7] } },
     { rule = { class = "Gimp*" },
       properties = { tag = tags[1][8] } },
     { rule = { class = "Amarokapp" },
@@ -485,39 +649,18 @@ end)
 
 client.add_signal("focus", function(c) c.border_color = beautiful.border_focus
     -- decrease transparency
-    if focus_trans then
+    if focus_trans and ( clienttable[c] == nil or not clienttable[c].custom_trans ) then
         c.opacity = opacity_focus
     end
 end)
 client.add_signal("unfocus", function(c) c.border_color = beautiful.border_normal
     -- Increase transparency
-    if focus_trans then
+    if focus_trans and ( clienttable[c] == nil or not clienttable[c].custom_trans ) then
         c.opacity = opacity_normal
     end
 end)
 
 -- }}}
 
--- {{{ Functions
--- Autostart function
-function autostart(dir)
-    if not dir then
-        do return nil end
-    end
-    local fd = io.popen("ls -1 -F " .. dir)
-    if not fd then
-        do return nil end
-    end
-    for file in fd:lines() do
-        local c= string.sub(file,-1)   -- last char
-        executable = string.sub( file, 1,-2 )
-        print("Awesome Autostart: Executing: " .. executable)
-        os.execute(dir .. "/" .. executable .. " &") -- launch in bg
-    end
-    io.close(fd)
-end
--- }}}
-
 -- Run autostart applications
-autostart_dir = awful.util.getdir("config") .. "/autostart"
 autostart(autostart_dir)
