@@ -4,12 +4,13 @@
 
 theme = {}
 
-theme.font          = "sans 8"
+-- theme.font          = "sans 8"
+theme.font          = "Tahoma 8"
 
-theme.bg_normal     = "#1c5f95"
-theme.bg_focus      = "#2a7fc0"
-theme.bg_urgent     = "#0000ff"
-theme.bg_minimize   = "#1a7f9e"
+theme.bg_normal     = "#1c5f95e0"
+theme.bg_focus      = "#2a7fc0e0"
+theme.bg_urgent     = "#0000ffe0"
+theme.bg_minimize   = "#1a7f9ee0"
 
 theme.fg_normal     = "#a0d3ff"
 theme.fg_focus      = "#ffffff"
@@ -17,9 +18,9 @@ theme.fg_urgent     = "#ffffff"
 theme.fg_minimize   = "#ffffff"
 
 theme.border_width  = "1"
-theme.border_normal = "#154770"
-theme.border_focus  = "#77b7ff"
-theme.border_marked = "#009288"
+theme.border_normal = "#154770c0"
+theme.border_focus  = "#77b7ffe0"
+theme.border_marked = "#009288d0"
 
 -- There are other variable sets
 -- overriding the default one when
@@ -49,6 +50,11 @@ theme.menu_width  = "100"
 -- beautiful.variable in your rc.lua
 --theme.bg_widget = "#cc0000"
 
+theme.dmenu_bg_normal     = "#1c5f95"
+theme.dmenu_bg_focus      = "#2a7fc0"
+theme.dmenu_fg_normal     = "#a0d3ff"
+theme.dmenu_fg_focus      = "#ffffff"
+
 -- Define the image to load
 theme.titlebar_close_button_normal = "/usr/share/awesome/themes/default/titlebar/close_normal.png"
 theme.titlebar_close_button_focus  = "/usr/share/awesome/themes/default/titlebar/close_focus.png"
@@ -75,7 +81,7 @@ theme.titlebar_maximized_button_focus_active  = "/usr/share/awesome/themes/defau
 
 -- You can use your own command to set your wallpaper
 -- theme.wallpaper_cmd = { "awsetbg /usr/share/awesome/themes/default/background.png" }
-theme.wallpaper_cmd = { "awsetbg -u feh /usr/share/wallpapers/default_blue.jpg" }
+theme.wallpaper_cmd = { "awsetbg -u feh -l" }
 
 
 -- You can use your own layout icons like this:
