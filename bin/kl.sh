@@ -25,10 +25,12 @@ until [ -z "$1" ] ; do
 			FLAG_I=1
 	;;
 		"-c" )
-			[[ -z "$2" && -f "$2" ]] && CONFIG_PATH="$2"
+			[[ -n "$2" && -f "$2" ]] && CONFIG_PATH="$2"
+			shift
 	;;
 		"-s" )
-			[[ -z "$2" && -f "$2/kernel/Makefile" ]] && KERNEL_SOURCES_PATH="$2"
+			[[ -n "$2" && -f "$2/kernel/Makefile" ]] && KERNEL_SOURCES_PATH="$2"
+			shift
 	;;
 		"-h" )
 			FLAG_H=1
@@ -72,6 +74,9 @@ else
 	[[ $CONFIG_PATH = "quit" ]] && exit 0
 	done
 fi
+
+echo $CONFIG_PATH
+echo $ITEM
 
 [[ -z "${KERNEL_SOURCES_PATH}" && -f "$(dirname $CONFIG_PATH)/kernel/Makefile" ]] && KERNEL_SOURCES_PATH="$(dirname $CONFIG_PATH)"
 
