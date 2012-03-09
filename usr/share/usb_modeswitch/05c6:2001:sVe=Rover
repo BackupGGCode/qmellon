@@ -1,0 +1,19 @@
+######################################################## 
+# Qualcomm, Inc. CDMA Wireless Modem/Phone
+# Qualcomm, Inc. Siemens SG75 
+
+DefaultVendor= 0x05c6
+DefaultProduct=0x2001
+
+TargetVendor=  0x05c6
+TargetProductList="3100,6000"
+
+# Qualcomm, Inc. CDMA Wireless Modem/Phone
+MessageContent="5553424312345678000000000000061b000000020000000000000000000000"
+
+# Qualcomm, Inc. Siemens SG75 
+#MessageContent="555342431234567800000000000006bd000000020000000000000000000000"
+
+NeedResponse=1
+
+CheckSuccess=20
