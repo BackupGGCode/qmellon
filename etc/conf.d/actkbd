@@ -1,0 +1,3 @@
+CONFIG="/etc/actkbd.conf"
+EVDEVICE="/dev/input/$(grep -A4 'keyboard' /proc/bus/input/devices | grep 'H:' | cut -d' ' -f4)"
+PIDFILE="/var/run/actkbd.pid"

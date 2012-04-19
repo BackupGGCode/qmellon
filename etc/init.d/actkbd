@@ -1,0 +1,19 @@
+#!/sbin/runscript
+# Copyright 1999-2012 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+depend() {
+	before acpid
+}
+
+start() {
+	ebegin "Starting actkbd"
+	start-stop-daemon --start --quiet --pidfile ${PIDFILE} --exec /usr/bin/actkbd -- -c ${CONFIG} -D -q -x -l -p ${PIDFILE} -d ${EVDEVICE}
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping actkbd"
+	start-stop-daemon --stop --quiet --pidfile ${PIDFILE} --exec /usr/bin/actkbd
+	eend $?
+}
