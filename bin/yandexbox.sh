@@ -17,7 +17,7 @@ mount_fuse() {
 	then
 		echo "Unated storage has been mounted"
 	else
-		echo "Failed to mount unated storage storage"
+		echo "Failed to mount unated storage"
 		exit 1
 	fi
 	if encfs --extpass="cat $HOME/.encfs/yandex.pwd" "/mnt/fuse/mhddfs/$USER/yandex/" "/mnt/fuse/encfs/$USER/yandex/"; then
@@ -32,15 +32,15 @@ umount_fuse() {
 		if fusermount -u /mnt/fuse/mhddfs/$USER/yandex; then
 			echo "Unated storage has been unmounted"
 		else
-			echo "Failed to unmount unated storage storage"
+			echo "Failed to unmount unated storage"
 			exit 1
 		fi
 	fi
 	if grep -q "/mnt/fuse/encfs/${USER}/yandex" /proc/mounts; then
 		if fusermount -u /mnt/fuse/encfs/$USER/yandex; then
-			echo "Encrypted storage has been mounted"
+			echo "Encrypted storage has been unmounted"
 		else
-			echo "Failed to mount encrypted storage storage"
+			echo "Failed to unmount encrypted storage"
 			exit 1
 		fi
 	fi
