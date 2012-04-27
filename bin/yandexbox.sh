@@ -56,5 +56,10 @@ umount_fuse() {
 case "$1" in
 	"-m" ) mount_fuse ;;
 	"-u" ) umount_fuse ;;
+	"-h" ) echo "Usage: $(basename "$0") <-m|-u|-h>"
+		echo "	-m	Mount"
+		echo "	-u	Unmount"
+		echo "	-h	Show this help"
+	;;
 	  *  ) exit 1 ;;
 esac
