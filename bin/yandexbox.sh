@@ -23,7 +23,7 @@ mount_fuse() {
 	if encfs --extpass="cat $HOME/.encfs/yandex.pwd" "/mnt/fuse/mhddfs/$USER/yandex/" "/mnt/fuse/encfs/$USER/yandex/"; then
 		echo "Encrypted storage has been mounted"
 	else
-		echo "Failed to mount encrypted storage storage"
+		echo "Failed to mount encrypted storage"
 		exit 1
 	fi
 }
@@ -53,13 +53,17 @@ umount_fuse() {
 	done
 }
 
+show_help() {
+	echo "Usage: $(basename "$0") <-m|-u|-h>"
+	echo "	-m	Mount"
+	echo "	-u	Unmount"
+	echo "	-h	Show this help"
+}
+
 case "$1" in
 	"-m" ) mount_fuse ;;
 	"-u" ) umount_fuse ;;
-	"-h" ) echo "Usage: $(basename "$0") <-m|-u|-h>"
-		echo "	-m	Mount"
-		echo "	-u	Unmount"
-		echo "	-h	Show this help"
-	;;
-	  *  ) exit 1 ;;
+	"-h" ) show_help ;;
+	  *  ) echo "Usage: $(basename "$0") <-m|-u|-h>"
+	  	exit 1 ;;
 esac
