@@ -1,26 +1,36 @@
 #! /bin/bash
 
-export  ENCFS6_CONFIG="${HOME}/.encfs/yandex.xml"
+# Path to WebDAV collection directory:
+export DAVFS_DIR="/mnt/fuse/dav/${USER}/yandex"
+# Path to the mhddfs mount point:
+export MHDDFS_DIR="/mnt/fuse/mhddfs/$USER/yandex"
+# Path to the encfs mount point:
+export ENCFS_DIR="/mnt/fuse/encfs/$USER/yandex"
+# Relative path to the encrypted root on WebDAV storages:
+export ENC_DIR="enc"
+# Path to encfs config:
+export ENCFS6_CONFIG="${HOME}/.encfs/yandex.xml"
+# Command to obtain encfs pass:
+export ENCFS_EXTPASS="cat $HOME/.encfs/yandex.pwd"
 
 mount_fuse() {
-	for i in /mnt/fuse/dav/${USER}/yandex/*; do
+	for i in "${DAVFS_DIR}"/*; do
 		if mount "$i"; then
 			echo "$i WebDAV storage has been mounted"
-			[[ -d "$i/enc" ]] || mkdir "$i/enc"
+			[[ -d "$i/${ENC_DIR}" ]] || mkdir "$i/${ENC_DIR}"
 		else
 			echo "Failed to mount $i WebDAV storage"
 			exit 1
 		fi
 	done
-	if mhddfs $(echo $(mount | grep "/mnt/fuse/dav/${USER}/yandex" | awk '{print $3"/enc"}')) \
-		"/mnt/fuse/mhddfs/$USER/yandex/"
+	if mhddfs $(echo $(mount | grep "${DAVFS_DIR}" | awk "{print \$3\"/${ENC_DIR}\"}")) "${MHDDFS_DIR}"
 	then
 		echo "Unated storage has been mounted"
 	else
 		echo "Failed to mount unated storage"
 		exit 1
 	fi
-	if encfs --extpass="cat $HOME/.encfs/yandex.pwd" "/mnt/fuse/mhddfs/$USER/yandex/" "/mnt/fuse/encfs/$USER/yandex/"; then
+	if encfs --extpass="${ENCFS_EXTPASS}" "${MHDDFS_DIR}" "${ENCFS_DIR}"; then
 		echo "Encrypted storage has been mounted"
 	else
 		echo "Failed to mount encrypted storage"
@@ -28,23 +38,23 @@ mount_fuse() {
 	fi
 }
 umount_fuse() {
-	if grep -q "/mnt/fuse/mhddfs/$USER/yandex" /proc/mounts; then
-		if fusermount -u /mnt/fuse/mhddfs/$USER/yandex; then
+	if grep -q "${MHDDFS_DIR}" /proc/mounts; then
+		if fusermount -u "${MHDDFS_DIR}"; then
 			echo "Unated storage has been unmounted"
 		else
 			echo "Failed to unmount unated storage"
 			exit 1
 		fi
 	fi
-	if grep -q "/mnt/fuse/encfs/${USER}/yandex" /proc/mounts; then
-		if fusermount -u /mnt/fuse/encfs/$USER/yandex; then
+	if grep -q "${ENCFS_DIR}" /proc/mounts; then
+		if fusermount -u "${ENCFS_DIR}"; then
 			echo "Encrypted storage has been unmounted"
 		else
 			echo "Failed to unmount encrypted storage"
 			exit 1
 		fi
 	fi
-	for i in $(mount | grep "/mnt/fuse/dav/${USER}/yandex" | awk '{print $3}'); do
+	for i in $(mount | grep  "${DAVFS_DIR}" | awk '{print $3}'); do
 		if umount "$i"; then
 			echo "$i WebDAV storage has been unmounted"
 		else
