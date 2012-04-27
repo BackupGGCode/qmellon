@@ -11,7 +11,7 @@ export ENC_DIR="enc"
 # Path to encfs config:
 export ENCFS6_CONFIG="${HOME}/.encfs/yandex.xml"
 # Command to obtain encfs pass:
-export ENCFS_EXTPASS="cat $HOME/.encfs/yandex.pwd"
+export ENCFS_EXTPASS="cat ${HOME}/.encfs/yandex.pwd"
 
 mount_fuse() {
 	for i in "${DAVFS_DIR}"/*; do
@@ -37,6 +37,7 @@ mount_fuse() {
 		exit 1
 	fi
 }
+
 umount_fuse() {
 	if grep -q "${MHDDFS_DIR}" /proc/mounts; then
 		if fusermount -u "${MHDDFS_DIR}"; then
