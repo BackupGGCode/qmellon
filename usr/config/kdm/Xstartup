@@ -10,10 +10,9 @@
 #
 #chown $USER /dev/console
 
-#exec sessreg -a -l $DISPLAY -h "`echo $DISPLAY | cut -d: -f1`" $USER
+# XDM configurations typically have sessreg here. KDM has it built-in.
 
 # NOTE: The session is aborted if the last command returns non-zero.
-imwheel -f -k
-xset m 3 8
-killall hyperspace
+
+killall -9 euphoria &
 true
