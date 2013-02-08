@@ -11,6 +11,7 @@ theme.bg_normal     = "#1c5f95e0"
 theme.bg_focus      = "#2a7fc0e0"
 theme.bg_urgent     = "#0000ffe0"
 theme.bg_minimize   = "#1a7f9ee0"
+theme.bg_systray    = theme.bg_normal
 
 theme.fg_normal     = "#a0d3ff"
 theme.fg_focus      = "#ffffff"
@@ -42,8 +43,8 @@ theme.tasklist_floating_icon = "/usr/share/awesome/themes/default/tasklist/float
 -- menu_[bg|fg]_[normal|focus]
 -- menu_[border_color|border_width]
 theme.menu_submenu_icon = "/usr/share/awesome/themes/default/submenu.png"
-theme.menu_height = "15"
-theme.menu_width  = "100"
+theme.menu_height = 15
+theme.menu_width  = 100
 
 -- You can add as many variables as
 -- you wish and access them by using
@@ -100,5 +101,24 @@ theme.layout_dwindle = "/usr/share/awesome/themes/default/layouts/dwindlew.png"
 
 theme.awesome_icon = "/usr/share/awesome/icons/awesome16.png"
 
+-- Define the icon theme for application icons. If not set then the icons 
+-- from /usr/share/icons and /usr/share/icons/hicolor will be used.
+theme.icon_theme = "oxygen"
+
+-- =======================================================================
+-- Blingbling
+
+theme.graph_color		= "#2a7fc0d0"
+theme.graph_line_color		= "#a0d3ffd0"
+theme.background_text_color	= "#00000066"
+theme.text_color		= theme.fg_normal
+
+theme.icon_accept	= "/usr/share/icons/oxygen/22x22/actions/dialog-ok-apply.png"
+theme.icon_cancel	= "/usr/share/icons/nuvola/22x22/actions/dialog-cancel.png"
+theme.icon_usb		= "/usr/share/icons/oxygen/22x22/devices/drive-removable-media-usb-pendrive.png"
+theme.icon_cdrom	= "/usr/share/icons/oxygen/22x22/devices/drive-optical.png"
+theme.icon_udisks_glue	= "/usr/share/icons/oxygen/22x22/devices/drive-removable-media-usb.png"
+theme.icon_reboot	= "/usr/share/icons/oxygen/22x22/actions/system-reboot.png"
+theme.icon_shutdown	= "/usr/share/icons/oxygen/22x22/actions/system-shutdown.png"
 return theme
--- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:encoding=utf-8:textwidth=80
+-- vim: filetype=lua:expandtab:shiftwidth=4:tabstop=8:softtabstop=4:textwidth=80
