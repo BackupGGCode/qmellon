@@ -1,0 +1,11 @@
+--- src/scrobbler.c.orig	2013-08-08 20:06:35.942881550 +0400
++++ src/scrobbler.c	2013-08-08 20:54:01.836786727 +0400
+@@ -46,7 +46,7 @@
+ #define AS_CLIENT_VERSION VERSION
+ 
+ /* don't submit more than this amount of songs in a batch. */
+-#define MAX_SUBMIT_COUNT 10
++#define MAX_SUBMIT_COUNT 3
+ 
+ static const char OK[] = "OK";
+ static const char BADSESSION[] = "BADSESSION";
