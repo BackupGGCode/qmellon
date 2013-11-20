@@ -1,0 +1,27 @@
+diff --git a/src/xmlsettingsdialog/basesettingsmanager.cpp b/src/xmlsettingsdialog/basesettingsmanager.cpp
+index 3e219f6..7f37993 100644
+--- a/src/xmlsettingsdialog/basesettingsmanager.cpp
++++ b/src/xmlsettingsdialog/basesettingsmanager.cpp
+@@ -30,6 +30,7 @@
+ #include "basesettingsmanager.h"
+ #include <QtDebug>
+ #include <QTimer>
++#include <thread>
+ 
+ namespace LeechCraft
+ {
+@@ -152,7 +153,13 @@ namespace Util
+ 		const auto& propValue = property (name);
+ 
+ 		if (!IsInitializing_)
+-			GetSettings ()->setValue (propName, propValue);
++		{
++			std::thread setter ([this, propName, propValue] ()
++					{
++						GetSettings ()->setValue (propName, propValue);
++					});
++			setter.detach ();
++		}
+ 
+ 		PropertyChanged (propName, propValue);
+ 

@@ -1,0 +1,25 @@
+=== modified file 'Platform/src/Unix/IO/DkDriveInfoProvider.cs'
+--- Platform/src/Unix/IO/DkDriveInfoProvider.cs	2011-02-26 20:06:29 +0000
++++ Platform/src/Unix/IO/DkDriveInfoProvider.cs	2012-09-02 20:49:42 +0000
+@@ -126,9 +126,10 @@
+ 				d.driveType = GetDriveType(parent);
+ 			} else if (dev.DeviceIsLuksClearText) {
+ 				// dev is a luks-holder representing an encrypted partition
+-				DkDisk encryptedPartition = new DkDisk(dev.LuksCleartextSlave);
+-				DkDisk drive = new DkDisk(encryptedPartition.PartitionSlave);
+-				d.driveType = GetDriveType(drive);
++				DkDisk master = new DkDisk(dev.LuksCleartextSlave);
++				if (!master.IsDrive)
++					master = new DkDisk(master.PartitionSlave);
++				d.driveType = GetDriveType(master);
+ 			} else if (dev.IsDrive) {
+ 				d.driveType = GetDriveType(dev);
+ 			} else {
+@@ -165,4 +166,4 @@
+ 		}
+ 	}
+ }
+-#endif
+\ No newline at end of file
++#endif
+

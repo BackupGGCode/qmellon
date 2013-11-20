@@ -1,0 +1,8 @@
+-video_cards_nvidia
+-nvidia
+-cuda
+-jit
+-X
+-tools
+-graphite
+-lto

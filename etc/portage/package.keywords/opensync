@@ -1,0 +1,13 @@
+=app-pda/libopensync-plugin-akonadi-0* ** =app-pda/libopensync-plugin-gnokii-0* ** =app-pda/libopensync-plugin-vformat-0.4* ** 
+=app-pda/libopensync-plugin-syncml-0.4* ** =app-pda/libopensync-plugin-file-0.4* ** =app-pda/libopensync-0.4* ** =app-pda/osynctool-0.4* ** 
+=app-pda/libsyncml-0.4* **
+
+=app-pda/libopensync-plugin-akonadi-9999* **
+=app-pda/libopensync-plugin-gnokii-9999* **
+=app-pda/libopensync-plugin-vformat-9999* **
+=app-pda/libopensync-plugin-syncml-9999* **
+=app-pda/libopensync-plugin-file-9999* **
+=app-pda/libopensync-plugin-irmc-9999* **
+=app-pda/libopensync-9999* **
+=app-pda/osynctool-9999* **
+=app-pda/libsyncml-9999* **

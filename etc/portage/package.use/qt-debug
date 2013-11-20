@@ -1,0 +1,16 @@
+dev-qt/qtcore debug
+dev-qt/qtdbus debug
+dev-qt/qtdeclarative debug
+dev-qt/qtgui debug
+dev-qt/qtmultimedia debug
+dev-qt/qtopengl debug
+dev-qt/qt3support debug
+dev-qt/qtsql debug
+dev-qt/qtsvg debug
+dev-qt/qttest debug
+dev-qt/qtwebkit debug -jit
+dev-qt/qtscript debug -jit
+dev-qt/qtxmlpatterns debug
+dev-qt/qtbearer debug
+dev-qt/designer debug -phonon
+dev-qt/linguist debug

@@ -1,0 +1,94 @@
+# move app-text/leechcraft-monocle app-leechcraft/lc-monocle
+app-leechcraft/lc-monocle debug
+# move media-sound/leechcraft-hotstreams app-leechcraft/lc-hotstreams
+app-leechcraft/lc-hotstreams debug
+# move media-sound/leechcraft-lastfmscrobble app-leechcraft/lc-lastfmscrobble
+app-leechcraft/lc-lastfmscrobble debug
+# move media-sound/leechcraft-lmp app-leechcraft/lc-lmp
+app-leechcraft/lc-lmp debug
+# move media-sound/leechcraft-musiczombie app-leechcraft/lc-musiczombie
+app-leechcraft/lc-musiczombie debug acoustid
+# move media-sound/leechcraft-touchstreams app-leechcraft/lc-touchstreams
+app-leechcraft/lc-touchstreams debug
+# move net-analyzer/leechcraft-networkmonitor app-leechcraft/lc-networkmonitor
+app-leechcraft/lc-networkmonitor debug
+# move net-im/leechcraft-azoth app-leechcraft/lc-azoth
+app-leechcraft/lc-azoth debug media
+# move net-misc/leechcraft-advancednotifications app-leechcraft/lc-advancednotifications
+app-leechcraft/lc-advancednotifications debug
+# move net-misc/leechcraft-anhero app-leechcraft/lc-anhero
+app-leechcraft/lc-anhero debug
+# move net-misc/leechcraft-auscrie app-leechcraft/lc-auscrie
+app-leechcraft/lc-auscrie debug
+# move net-misc/leechcraft-blogique app-leechcraft/lc-blogique
+app-leechcraft/lc-blogique debug
+# move net-misc/leechcraft-core app-leechcraft/lc-core
+app-leechcraft/lc-core debug
+# move net-misc/leechcraft-cstp app-leechcraft/lc-cstp
+app-leechcraft/lc-cstp debug
+# move net-misc/leechcraft-dbusmanager app-leechcraft/lc-dbusmanager
+app-leechcraft/lc-dbusmanager debug
+# move net-misc/leechcraft-gacts app-leechcraft/lc-gacts
+app-leechcraft/lc-gacts debug
+# move net-misc/leechcraft-glance app-leechcraft/lc-glance
+app-leechcraft/lc-glance debug
+# move net-misc/leechcraft-historyholder app-leechcraft/lc-historyholder
+app-leechcraft/lc-historyholder debug
+# move net-misc/leechcraft-kinotify app-leechcraft/lc-kinotify
+app-leechcraft/lc-kinotify debug
+# move net-misc/leechcraft-lackman app-leechcraft/lc-lackman
+app-leechcraft/lc-lackman debug
+# move net-misc/leechcraft-launchy app-leechcraft/lc-launchy
+app-leechcraft/lc-launchy debug
+# move net-misc/leechcraft-lemon app-leechcraft/lc-lemon
+app-leechcraft/lc-lemon debug
+# move net-misc/leechcraft-newlife app-leechcraft/lc-newlife
+app-leechcraft/lc-newlife debug
+# move net-misc/leechcraft-otlozhu app-leechcraft/lc-otlozhu
+app-leechcraft/lc-otlozhu debug
+# move net-misc/leechcraft-pintab app-leechcraft/lc-pintab
+app-leechcraft/lc-pintab debug
+# move net-misc/leechcraft-qrosp app-leechcraft/lc-qrosp
+app-leechcraft/lc-qrosp debug
+# move net-misc/leechcraft-sb2 app-leechcraft/lc-sb2
+app-leechcraft/lc-sb2 debug
+# move net-misc/leechcraft-secman app-leechcraft/lc-secman
+app-leechcraft/lc-secman debug
+# move net-misc/leechcraft-summary app-leechcraft/lc-summary
+app-leechcraft/lc-summary debug
+# move net-misc/leechcraft-tabsessmanager app-leechcraft/lc-tabsessmanager
+app-leechcraft/lc-tabsessmanager debug
+# move net-misc/leechcraft-tabslist app-leechcraft/lc-tabslist
+app-leechcraft/lc-tabslist debug
+# move net-proxy/leechcraft-xproxy app-leechcraft/lc-xproxy
+app-leechcraft/lc-xproxy debug
+# move sys-fs/leechcraft-vrooby app-leechcraft/lc-vrooby
+app-leechcraft/lc-vrooby debug udisks2 -udisks
+# move www-client/leechcraft-deadlyrics app-leechcraft/lc-deadlyrics
+app-leechcraft/lc-deadlyrics debug
+# move www-client/leechcraft-dolozhee app-leechcraft/lc-dolozhee
+app-leechcraft/lc-dolozhee debug
+# move www-client/leechcraft-poshuku app-leechcraft/lc-poshuku
+app-leechcraft/lc-poshuku debug
+# move www-client/leechcraft-vgrabber app-leechcraft/lc-vgrabber
+app-leechcraft/lc-vgrabber debug
+# move www-misc/leechcraft-pogooglue app-leechcraft/lc-pogooglue
+app-leechcraft/lc-pogooglue debug
+# move www-misc/leechcraft-seekthru app-leechcraft/lc-seekthru
+app-leechcraft/lc-seekthru debug
+# move x11-plugins/leechcraft-lhtr app-leechcraft/lc-lhtr
+app-leechcraft/lc-lhtr debug
+# move x11-plugins/leechcraft-tpi app-leechcraft/lc-tpi
+app-leechcraft/lc-tpi debug
+app-leechcraft/lc-gmailnotifier debug notify quark
+app-leechcraft/lc-xtazy debug
+app-leechcraft/lc-popishu debug
+app-leechcraft/lc-krigstask debug
+app-leechcraft/lc-mellonetray debug
+app-leechcraft/lc-imgaste debug
+app-leechcraft/lc-aggregator debug
+app-leechcraft/liblaretz debug
+app-leechcraft/lc-fenet debug
+app-leechcraft/lc-blasq debug
+app-leechcraft/lc-devmon debug
+net-libs/qxmpp debug

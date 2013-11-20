@@ -1,0 +1,16 @@
+dev-qt/qtcore no-lto.conf splitdebug.conf
+dev-qt/qtdbus no-lto.conf splitdebug.conf
+dev-qt/qtdeclarative no-lto.conf splitdebug.conf
+dev-qt/qtgui no-lto.conf splitdebug.conf
+dev-qt/qtmultimedia no-lto.conf splitdebug.conf
+dev-qt/qtopengl no-lto.conf splitdebug.conf
+dev-qt/qt3support no-lto.conf splitdebug.conf
+dev-qt/qtscript no-lto.conf splitdebug.conf
+dev-qt/qtsql no-lto.conf splitdebug.conf
+dev-qt/qtsvg no-lto.conf splitdebug.conf
+dev-qt/qttest no-lto.conf splitdebug.conf
+dev-qt/qtwebkit no-lto.conf splitdebug.conf
+dev-qt/qtxmlpatterns no-lto.conf splitdebug.conf
+dev-qt/designer no-lto.conf splitdebug.conf
+dev-qt/qtbearer no-lto.conf splitdebug.conf
+dev-qt/linguist no-lto.conf splitdebug.conf

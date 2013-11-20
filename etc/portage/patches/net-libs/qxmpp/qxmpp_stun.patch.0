@@ -1,0 +1,72 @@
+diff --git a/src/base/QXmppStun.cpp b/src/base/QXmppStun.cpp
+index 1004cb3..b6c3054 100644
+--- a/src/base/QXmppStun.cpp
++++ b/src/base/QXmppStun.cpp
+@@ -28,6 +28,7 @@
+ #include <QNetworkInterface>
+ #include <QUdpSocket>
+ #include <QTimer>
++#include <QtDebug>
+ 
+ #include "QXmppStun.h"
+ #include "QXmppUtils.h"
+@@ -2152,17 +2153,23 @@ void QXmppIceComponent::turnConnected()
+ 
+ static QList<QUdpSocket*> reservePort(const QList<QHostAddress> &addresses, quint16 port, QObject *parent)
+ {
++	qDebug () << Q_FUNC_INFO;
+     QList<QUdpSocket*> sockets;
+     foreach (const QHostAddress &address, addresses) {
++		qDebug () << "creating socket for" << address.toString ();
+         QUdpSocket *socket = new QUdpSocket(parent);
+         sockets << socket;
++		qDebug () << "binding...";
+         if (!socket->bind(address, port)) {
++			qDebug () << "failed, dying" << socket->error ();
+             for (int i = 0; i < sockets.size(); ++i)
+                 delete sockets[i];
+             sockets.clear();
+             break;
+         }
++		qDebug () << "alive";
+     }
++	qDebug () << "done";
+     return sockets;
+ }
+ 
+@@ -2208,22 +2215,26 @@ QList<QHostAddress> QXmppIceComponent::discoverAddresses()
+ 
+ QList<QUdpSocket*> QXmppIceComponent::reservePorts(const QList<QHostAddress> &addresses, int count, QObject *parent)
+ {
++	qDebug () << Q_FUNC_INFO << addresses.size () << count;
+     QList<QUdpSocket*> sockets;
+     if (addresses.isEmpty() || !count)
+         return sockets;
+ 
+     const int expectedSize = addresses.size() * count;
+     quint16 port = 49152;
+-    while (sockets.size() != expectedSize) {
++    while (sockets.size() != expectedSize && port < 65536 - count) {
++		qDebug () << "trying" << port;
+         // reserve first port (even number)
+         if (port % 2)
+             port++;
+         QList<QUdpSocket*> socketChunk;
+         while (socketChunk.isEmpty() && port <= 65536 - count) {
++			qDebug () << "init" << port;
+             socketChunk = reservePort(addresses, port, parent);
+             if (socketChunk.isEmpty())
+                 port += 2;
+         }
++		qDebug () << socketChunk.isEmpty ();
+         if (socketChunk.isEmpty())
+             return sockets;
+ 
+@@ -2235,6 +2246,7 @@ QList<QUdpSocket*> QXmppIceComponent::reservePorts(const QList<QHostAddress> &ad
+                 break;
+             sockets << socketChunk;
+         }
++		qDebug () << sockets.size ();
+ 
+         // cleanup if we failed
+         if (sockets.size() != expectedSize) {

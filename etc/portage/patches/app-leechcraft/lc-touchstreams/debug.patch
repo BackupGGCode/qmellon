@@ -1,0 +1,12 @@
+diff --git a/src/plugins/touchstreams/audiosearch.cpp b/src/plugins/touchstreams/audiosearch.cpp
+index 44fb7b3..0e07761 100644
+--- a/src/plugins/touchstreams/audiosearch.cpp
++++ b/src/plugins/touchstreams/audiosearch.cpp
+@@ -94,6 +94,7 @@ namespace TouchStreams
+ 		reply->deleteLater ();
+ 
+ 		const auto& data = reply->readAll ();
++		qDebug () << "TS audiosearch" << data;
+ 		std::istringstream istr (data.constData ());
+ 		boost::property_tree::ptree pt;
+ 		boost::property_tree::read_json (istr, pt);

@@ -1,0 +1,341 @@
+app-accessibility/festival mbrola
+app-admin/conky nano-syntax -nvidia
+app-admin/rsyslog relp snmp
+app-admin/testdisk ntfs jpeg
+app-arch/p7zip rcc wxwidgets
+app-arch/unzip natspec
+app-text/stardict spell tools
+app-misc/anki graph sound furigana
+app-misc/fdupes md5sum-external
+app-misc/gramps reports webkit
+app-misc/recoll dvi id3 wv msdoc msxls pics xattr msppt rtf camelcase chm ics lyx zip -fam info ps tex audio wordperfect
+app-misc/strigi inotify log
+app-misc/tracker gsf applet iptc laptop gtk xps -xine
+app-office/lyx docbook dot html rtf dia xetex enchant gnumeric monolithic-build luatex
+app-shells/bash plugins
+app-shells/zsh doc examples
+app-text/enchant aspell
+app-text/evince dvi
+app-text/fbreader qt
+app-text/lcdf-typetools kpathsea
+app-text/linuxdoc-tools -tetex
+app-text/texlive-core doc xetex
+app-text/texlive doc X png xml context extra games graphics humanities music omega pstricks publishers science tex4ht xetex detex dvi2tty dvipdfm texi2html metapost epspdf pdfannotextractor
+dev-db/mysql -berkdb embedded
+dev-games/ode double-precision
+dev-lang/php -recode -threads sqlite suhosin
+dev-lang/python tk sqlite
+#dev-lang/tcl -threads
+#dev-lang/tk -threads
+dev-python/PyQt4 webkit sql declarative xmlpatterns multimedia script
+dev-python/wxpython gtk2
+dev-tcltk/tclx tk
+dev-tcltk/tls tk
+dev-tex/latex-beamer doc lyx
+dev-texlive/texlive-basic doc
+dev-texlive/texlive-bibtexextra doc
+dev-texlive/texlive-context doc
+dev-texlive/texlive-documentation-base doc
+dev-texlive/texlive-documentation-russian doc
+dev-texlive/texlive-fontsextra doc
+dev-texlive/texlive-fontsrecommended doc
+dev-texlive/texlive-formatsextra doc
+dev-texlive/texlive-games doc
+dev-texlive/texlive-genericextra doc
+dev-texlive/texlive-genericrecommended doc
+dev-texlive/texlive-htmlxml doc
+dev-texlive/texlive-humanities doc
+dev-texlive/texlive-langcyrillic doc
+# move dev-texlive/texlive-latex3 dev-texlive/texlive-latexrecommended
+dev-texlive/texlive-latexrecommended doc
+dev-texlive/texlive-latex doc
+dev-texlive/texlive-latexextra doc
+dev-texlive/texlive-latexrecommended doc
+dev-texlive/texlive-mathextra doc
+dev-texlive/texlive-metapost doc
+dev-texlive/texlive-music doc
+dev-texlive/texlive-omega doc
+dev-texlive/texlive-pictures doc
+dev-texlive/texlive-plainextra doc
+dev-texlive/texlive-pstricks doc
+# move dev-texlive/texlive-psutils dev-texlive/texlive-fontutils
+dev-texlive/texlive-fontutils doc
+dev-texlive/texlive-publishers doc
+dev-texlive/texlive-science doc
+dev-texlive/texlive-texinfo doc
+dev-texlive/texlive-xetex doc
+dev-tex/pgf doc
+games-fps/quake3 teamarena
+kde-base/gwenview kipi
+kde-base/juk tunepimp
+kde-base/kaddressbook gnokii
+kde-base/kalzium editor
+kde-base/kalzium -editor -plasma -solver
+kde-base/kdelibs lzma upnp udisks2
+kde-base/kdm -pertty
+kde-base/kget -bittorrent sqlite
+kde-base/kig
+kde-base/konqueror branding thumbnail
+kde-base/kopete addbookmarks autoreplace contactnotes highlight history irc jingle nowlistening sms statistics texteffect translator msn otr oscar
+kde-base/krdc rdesktop telepathy
+kde-base/kstars fits
+kde-base/libkcddb musicbrainz
+#kde-base/libkonq -pertty
+kde-base/marble designer-plugin shapefile zip
+kde-base/okular chm ebook
+kde-base/plasma-workspace -google-gadgets qalculate python
+kde-misc/kdiff3 konqueror
+kde-misc/tellico cddb addressbook taglib xmp yaz
+mail-mta/postfix mbox
+media-gfx/gimp -aalib -curl -alsa
+media-gfx/splashutils fbcondecor -mng
+media-libs/freetype utils kpathsea infinality
+media-libs/id3lib rcc
+media-libs/libsdl svga
+media-libs/taglib rcc
+media-libs/xine-lib vcd
+media-plugins/audacious-plugins cue ffmpeg fluidsynth lame midi gtk3
+media-sound/audacity id3tag vamp soundtouch ffmpeg midi sbsms
+media-sound/mpd lame cdio cue lastfmradio sqlite zip pipe inotify mpg123 recorder gme fluidsynth faad
+media-video/avidemux aften vpx
+media-video/mplayer tga md5sum doc xanim radio vdpau -real -cdparanoia rtmp
+net-dialup/ppp eap-tls dhcp
+net-dns/avahi mdnsresponder-compat autoipd
+net-im/mcabber otr
+net-misc/openvpn iproute2 down-root examples
+net-news/liferea webkit
+net-p2p/amule stats
+net-print/hplip -scanner -hpcups hpijs
+sci-geosciences/grass tcl tk sqlite
+sci-libs/gsl cblas
+sys-block/parted device-mapper
+sys-apps/portage doc epydoc python3
+sys-apps/shadow audit
+sys-apps/util-linux loop-aes
+sys-block/gparted ntfs fat
+sys-libs/pam audit
+sys-power/acpid doc
+# texlive
+www-client/elinks gopher
+www-client/firefox system-sqlite jit system-jpeg system-cairo system-icu
+x11-base/xorg-server kdrive
+x11-libs/cairo cleartype
+x11-libs/cairo glitz tee
+# move x11-libs/openmotif x11-libs/motif
+x11-libs/motif xft
+x11-libs/wxGTK gtk2
+x11-terms/rxvt-unicode afterimage blink fading-colors secondary-wheel wcwidth -vanilla pixbuf
+games-action/chromium-bsu qt3
+app-crypt/pinentry -qt3
+media-radio/unixcw qt3
+sys-power/nvclock qt3
+app-text/djvu -nsplugin
+kde-base/pykde4 akonadi
+app-portage/layman git subversion bazaar cvs darcs mercurial
+sys-power/pm-utils ntp
+games-strategy/warzone2100 videos
+x11-themes/gtk-engines-qtcurve firefox3
+media-sound/ncmpcpp clock taglib fftw outputs visualizer
+app-emulation/q4wine icoutils
+net-libs/ortp srtp
+net-im/psi whiteboarding plugins -webkit iconsets enchant jingle extras
+net-misc/nx rdesktop
+net-wireless/wpa_supplicant wps
+sci-libs/gdal doc fits geos gml hdf5 netcdf ogdi sqlite -pdf opencl
+dev-vcs/mercurial gpg
+app-arch/libarchive lzma
+dev-libs/elfutils lzma
+kde-base/ark lzma
+kde-base/kdebase-kioslaves lzma
+# net-libs/libsoup gnome
+media-video/ffmpeg vdpau cdio avx network aacplus libv4l schroedinger vpx rtmp opus
+sci-chemistry/pymol apbs vmd numpy
+app-editors/tea hunspell
+dev-db/sqlite fts3 secure-delete extensions unlock-notify
+app-misc/screen vsplit
+app-portage/eix optimization strong-optimization
+x11-libs/fltk xft
+app-admin/sysstat cron
+media-video/transcode postproc
+sci-mathematics/maple examples system-java iampirate
+net-misc/curl nss -gnutls
+dev-libs/apr-util sqlite
+dev-libs/cyrus-sasl sqlite
+dev-python/sqlalchemy sqlite
+mail-filter/spamassassin sqlite
+# move net-misc/leechcraft-core app-leechcraft/lc-core
+app-leechcraft/lc-core -postgres sqlite
+net-news/leechcraft-aggregator -postgres sqlite
+# move www-client/leechcraft-poshuku app-leechcraft/lc-poshuku
+app-leechcraft/lc-poshuku -postgres sqlite pogooglue
+media-libs/libcanberra gtk
+app-misc/freemind groovy
+kde-base/kdeplasma-addons desktopglobe qalculate qwt attica ibus
+kde-base/dolphin thumbnail
+media-gfx/digikam thumbnails themedesigner addressbook video gphoto2 mysql
+kde-base/klinkstatus tidy
+kde-base/cantor analitza qalculate
+sys-devel/gcc objc objc++ objc-gc graphite go fortran lto
+app-emulation/wine -ldap udisks opencl
+media-fonts/terminus-font -ru-g
+dev-vcs/subversion -dso perl
+media-libs/freeglut mpx
+net-libs/libpcap libnl
+media-plugins/gst-plugins-meta lame taglib libvisual http vpx
+net-libs/loudmouth debug
+net-im/psi-plugins-meta attention autoreply birthdayreminder captchaforms cleaner conferencelogger extendedoptions historykeeper icqdie image juick screenshot skins stopspam storagenotes translate watcher chess contentdownloader qipxstatuses videostatus gmailservice psto pepchangenotify extendedmenu otr clientswitcher
+=media-libs/lcms-1.19 static-libs
+app-office/akonadi-server mysql
+media-sound/sox ao
+media-sound/audacious session gtk3
+media-libs/libpng apng
+www-client/chromium system-sqlite
+app-arch/zip natspec
+sys-auth/pambase pam_ssh
+# move x11-libs/qt-core dev-qt/qtcore
+dev-qt/qtcore optimized-qmake
+# move x11-libs/qt-gui dev-qt/qtgui
+dev-qt/qtgui raster gtkstyle
+virtual/mysql embedded
+dev-libs/libgcrypt static-libs
+# move media-sound/phonon media-libs/phonon
+media-libs/phonon vlc
+net-libs/libssh pcap
+virtual/jpeg static-libs
+net-p2p/ktorrent rss webinterface
+media-libs/gegl graphviz lensfun
+net-p2p/i2p initscript
+app-portage/pfl network-cron
+media-libs/libpng:0 static-libs
+net-p2p/deluge webinterface gtk
+media-libs/mediastreamer video
+media-libs/libwmf xml
+####
+dev-libs/DirectFB -sdl
+app-arch/cabextract extra-tools
+net-wireless/wpa_supplicant wimax ap p2p
+# move x11-libs/qt-sql dev-qt/qtsql
+dev-qt/qtsql mysql
+sys-boot/grub device-mapper mount
+media-gfx/sane-backends -v4l xinetd
+net-misc/networkmanager connection-sharing dhcpcd doc resolvconf -gnutls wimax modemmanager
+dev-python/pyudev pyqt4
+x11-drivers/nvidia-drivers gtk -pax_kernel
+sys-power/cpufreqd -nvidia
+app-misc/mc -edit -slang -spell
+media-libs/freetype:2 static-libs
+media-libs/opencv -cuda sse3 opencl
+sci-chemistry/vmd -cuda
+virtual/ffmpeg vdpau
+www-plugins/adobe-flash vdpau
+media-video/mplayer2 vdpau quvi postproc pvr
+app-admin/sudo -skey
+sci-chemistry/avogadro -python
+media-libs/mesa gallium xvmc llvm vdpau shared-dricore xa g3dvl openvg osmesa gles2
+sci-astronomy/celestia theora gtk
+sci-astronomy/stellarium stars
+sci-biology/sbagen doc examples sounds
+sys-libs/zlib minizip static-libs
+app-i18n/uim anthy prime skk sqlite gtk3 eb
+app-i18n/ibus introspection deprecated gtk3
+app-i18n/ibus-m17n gtk
+app-office/scribus templates examples -minimal
+app-arch/bzip2 static-libs
+mail-client/thunderbird system-sqlite -crashreporter -lightning jit system-icu system-cairo system-jpeg
+mail-client/claws-mail -crypt -imap -pda -ldap
+app-office/libreoffice pdfimport nlpsolver -nsplugin java
+app-emulation/virtualbox-modules -pax_kernel
+media-plugins/kipi-plugins panorama calendar expoblending redeyes gpssync
+media-sound/shntool mac alac
+net-libs/webkit-gtk webgl jit
+sys-fs/ntfs3g ntfsprogs
+kde-base/dolphin-plugins mercurial git bazaar subversion
+media-gfx/imagemagick corefonts opencl
+media-libs/libjpeg-turbo static-libs
+net-dns/bind dlz
+=sci-chemistry/vmd-1.9.1 -cuda
+media-sound/pulseaudio equalizer realtime qt
+media-libs/libvpx sse3 sse4_1
+media-sound/pms regex
+media-sound/deadbeef mono2stereo rpath psf cover-imlib2 dumb notify vtx nullout gme tta ape src converter zip midi shellexec m3u cover hotkeys supereq shn adplug lastfm gtk3 infobar -gtk2 alac -ffmpeg
+media-sound/amarok ofa lastfm
+media-video/mkvtoolnix wxwidgets
+media-sound/mumble speech
+net-wireless/bluez test-programs
+app-text/asciidoc highlight
+kde-base/kdepimlibs prison
+kde-base/klipper prison
+net-firewall/shorewall doc
+net-firewall/ufw examples
+app-emulation/virtualbox extensions
+net-misc/wget -gnutls
+media-libs/sdl-mixer midi mod
+sci-libs/hdf5 -cxx -fortran
+sys-process/lsof rpc
+~www-client/elinks-0.12_pre5 -javascript
+games-rpg/sacred-gold arch iampirate
+sys-devel/llvm gold
+kde-base/kdepim-runtime google facebook
+kde-base/krfb telepathy
+net-dns/dnsmasq script conntrack
+media-sound/deadbeef-infobar -gtk2 gtk3
+dev-libs/libpcre jit
+media-libs/libquvi jit
+sys-apps/pciutils -zlib
+sys-fs/cryptsetup -static
+sys-fs/udev introspection
+virtual/udev gudev hwdb
+net-im/psimedia extras
+app-mobilephone/gammu python
+net-proxy/tsocks tordns
+net-analyzer/nmap lua
+dev-vcs/git subversion
+media-sound/clementine lastfm projectm
+x11-libs/vte python
+app-text/goldendict debug
+app-misc/gcstar stats tellico
+app-i18n/virtaal tinytm
+app-pda/libopensync-plugin-syncml http
+app-pda/libsyncml http
+net-misc/tor transparent-proxy nat-pmp upnp
+x11-misc/outwiker plugins
+x11-misc/rednotebook libyaml
+dev-python/pyyaml libyaml
+sys-kernel/genkernel cryptsetup
+net-p2p/bitcoin-qt 1stclassmsg
+net-analyzer/wireshark smi -gtk2
+net-fs/samba swat ads winbind -client
+media-plugins/osdlyrics mpd -xmms2
+x11-plugins/vicious contrib
+kde-base/kate pate
+media-libs/libextractor midi tidy gsf
+app-emulation/emul-linux-x86-baselibs development
+dev-libs/geoip city
+media-libs/elementary emotion ethumb quicklaunch xdg
+dev-libs/e_dbus -connman
+media-libs/ethumb emotion
+media-libs/evas sse3
+media-plugins/evas_generic_loaders -raw
+sci-biology/ncbi-tools++ boost cppunit freetype glut hdf5 muparser sqlite3 xerces xslt -gnutls
+media-sound/rhythmbox -nsplugin -cdr
+media-libs/lcms python
+dev-libs/boost python
+media-video/libav vdpau
+dev-libs/leveldb -snappy
+app-backup/bacula examples
+media-plugins/deadbeef-vk gtk3
+media-plugins/deadbeef-infobar gtk3
+sys-fs/udisks cryptsetup
+sys-fs/lvm2 lvm2create_initrd
+app-arch/rar all_sfx
+sys-libs/gpm static-libs
+sys-libs/talloc python
+app-text/zathura magic
+media-gfx/exiv2 xmp contrib examples
+kde-base/nepomuk-core epub
+sys-apps/openrc tools
+net-im/pidgin gtk -ncurses -gstreamer
+dev-libs/m17n-lib athena bidi anthy
+net-fs/cifs-utils ads
+net-p2p/imule webserver daemon imulecmd
+net-firewall/shorewall6 doc
