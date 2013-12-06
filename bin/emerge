@@ -1,0 +1,87 @@
+#! /bin/bash
+
+MSIZE="3072M"
+DEV="2"
+DEVICE="/dev/zram${DEV}"
+BLOCK="/sys/block/zram${DEV}"
+mounted=false
+
+. /etc/make.conf
+
+if [ -z "$PORTAGE_TMPDIR" ]; then
+  PORTAGE_TMPDIR="/var/tmp/portage"
+fi
+
+Fatal() {
+	printf '%s: %s\n' "${0##*/}" "${*}"
+	exit 1
+}
+
+vl_create() {
+	test -e "${DEVICE}" || Fatal "cannot find ${DEVICE}"
+	test -d "${BLOCK}" || Fatal "cannot find ${BLOCK}"
+	echo "${MSIZE}" > "${BLOCK}/disksize" || Fatal "cannot set zram${DEV} size"
+	mkfs.ext4 -m0 \
+		'-O^huge_file,sparse_super,extent,^uninit_bg,dir_nlink,extra_isize,sparse_super,^has_journal' \
+		"${DEVICE}" > /dev/null || Fatal "mkfs.ext4 ${DEVICE} failed"
+	tune2fs -c0 -i0 -m0 "${DEVICE}" > /dev/null
+	echo "Volume created"
+}
+
+
+vl_mount() {
+	mount -t ext4 -o noauto,noatime,nodiratime,nodev,nosuid,discard -- "${DEVICE}" "$PORTAGE_TMPDIR" \
+	|| Fatal "mount of ${PORTAGE_TMPDIR} failed"
+	VL_MOUNTED="true"
+	rm -rf "${PORTAGE_TMPDIR}"/*
+	echo "${PORTAGE_TMPDIR} mounted"
+}
+
+vl_unmount() {
+	umount "${PORTAGE_TMPDIR}" || Fatal "unmount of ${PORTAGE_TMPDIR} failed"
+	echo "${PORTAGE_TMPDIR} unmounted"
+}
+
+vl_reset() {
+	test -d "${BLOCK}" || Fatal "cannot find ${BLOCK}"
+	echo "1" > "${BLOCK}/reset" || Fatal "cannot reset zram${DEV}"
+	echo "zram${DEV} reseted"
+}
+
+vl_check() {
+	local br=false error=0
+	while [[ "$br" == "false" ]]; do
+		if ! lsof "${PORTAGE_TMPDIR}" && [ -z "$(ls "${PORTAGE_TMPDIR}")" ]; then
+			br="true"
+		elif [ -n "$(ls "${PORTAGE_TMPDIR}")" ]; then
+			echo "$PORTAGE_TMPDIR is not empty"
+			ls -hal "${PORTAGE_TMPDIR}"
+		else
+			echo "$PORTAGE_TMPDIR is used"
+		fi
+		if [[ "$br" == "false" ]]; then
+			echo "Do you want to try again? Type "n" for now."
+			read TEXT
+			if [[ "x$TEXT" == "xn" ]]; then
+				br="true"
+				error=1
+			fi
+		fi
+	done
+	[[ "${error}" == "0" ]]
+}
+
+
+if ! grep -q "${PORTAGE_TMPDIR}" /proc/mounts && [[ "$(id -u)" == "0" ]]; then
+	echo hi
+	vl_reset
+	vl_create
+	vl_mount
+fi
+
+/usr/bin/emerge ${*}
+
+if [ -n "${VL_MOUNTED}" ] && vl_check; then
+	vl_unmount
+	vl_reset
+fi
