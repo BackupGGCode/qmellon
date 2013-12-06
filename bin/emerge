@@ -73,7 +73,6 @@ vl_check() {
 
 
 if ! grep -q "${PORTAGE_TMPDIR}" /proc/mounts && [[ "$(id -u)" == "0" ]]; then
-	echo hi
 	vl_reset
 	vl_create
 	vl_mount
