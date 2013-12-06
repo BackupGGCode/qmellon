@@ -60,7 +60,7 @@ vl_check() {
 			echo "$PORTAGE_TMPDIR is used"
 		fi
 		if [[ "$br" == "false" ]]; then
-			echo "Do you want to try again? Type "n" for now."
+			echo "Do you want to try again? Type "n" for no."
 			read TEXT
 			if [[ "x$TEXT" == "xn" ]]; then
 				br="true"
