@@ -1,0 +1,22 @@
+User tor
+Group tor
+PIDFile /var/run/tor/tor.pid
+SocksPort 127.0.0.1:9760
+SocksPort 127.0.0.1:9761
+SocksPort 127.0.0.1:9762
+SocksPort 127.0.0.1:9763
+SocksPort 127.0.0.1:9764
+SocksPort 127.0.0.1:9765
+SocksPort 127.0.0.1:9766
+SocksPort 127.0.0.1:9767
+SocksPort 127.0.0.1:9767
+SocksPort 127.0.0.1:9769
+Log notice file /var/log/tor/tor.log
+DataDirectory /var/lib/tor/data
+ControlPort 9759
+HashedControlPassword 16:B6931976200F9406605902BC32C0A70AD5A8AD21C1D5E0BCE794142C34
+ORPort 23927
+BridgeRelay 1
+RelayBandwidthRate 500KB
+ExitPolicy reject *:*
+ConnLimit 2000
