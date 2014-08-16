@@ -59,7 +59,7 @@ if [ ! -z "$FLAG_H" ] ; then
 	echo "	-h	display this help and exit"
 	echo "	-i	interpretation"
 	echo "	-r	rebuild db (works only with '-d')"
-	echo "	-s <kernel sources>	the path name of kernel config file"
+	echo "	-s <kernel sources>	the path name of kernel sources"
 	echo "	-t	translate parameter <-> description"
 	echo "	parameter|description	kernel parameter, or description of parameter"
 	exit 0
