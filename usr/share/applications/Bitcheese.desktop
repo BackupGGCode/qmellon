@@ -1,0 +1,14 @@
+[Desktop Entry]
+Comment=uplaod shit to bitcheese.net
+Exec=bitch.sh -xk '%F'
+GenericName=uploader
+Icon=go-up
+Name=Bitcheese
+NoDisplay=false
+Path[$e]=
+StartupNotify=true
+Terminal=0
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
