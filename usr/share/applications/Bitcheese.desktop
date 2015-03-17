@@ -1,6 +1,6 @@
 [Desktop Entry]
 Comment=uplaod shit to bitcheese.net
-Exec=bitch.sh -xk '%F'
+Exec=bitch.sh -xdk '%F'
 GenericName=uploader
 Icon=go-up
 Name=Bitcheese
