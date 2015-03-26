@@ -8,13 +8,21 @@ if [[ "${EBUILD_PHASE}" == "depend" && "${PORTAGE_REPO_NAME}" != "gentoo" && "${
 fi
 
 if [[ "${EBUILD_PHASE}" == "setup" && -n "${NOLTO}" ]]; then
+	export LDFLAGS="${LDFLAGS// -flto/}"
+	export LDFLAGS="${LDFLAGS// -fuse-linker-plugin/}"
 	export CFLAGS="${CFLAGS// -flto/}"
-	[[ "${NOLTO}" != "force" ]] && export CFLAGS="${CFLAGS// -fno-lto/}"
-	[[ "${NOLTO}" != "force" ]] && export CFLAGS="${CFLAGS// -fno-use-linker-plugin/}"
+	export CFLAGS="${CFLAGS// -fuse-linker-plugin/}"
+	if [[ "${CC}" == "clang" || "${CXX}" == "clang++" ]]; then 
+		export CFLAGS="${CFLAGS// -fno-lto/}"
+		export CFLAGS="${CFLAGS// -fno-use-linker-plugin/}"
+		export LDFLAGS="${LDFLAGS// -fno-lto/}"
+		export LDFLAGS="${LDFLAGS// -fno-use-linker-plugin/}"
+	else
+		CFLAGS="${CFLAGS} -fno-lto -fno-use-linker-plugin"
+		LDFLAGS="${LDFLAGS} -fno-lto -fno-use-linker-plugin"
+	fi
 	export CXXFLAGS="${CFLAGS}"
 	export FCFLAGS="${CFLAGS}"
 	export FFLAGS="${CFLAGS}"
-	export LDFLAGS="${LDFLAGS// -flto/}"
-	[[ "${NOLTO}" != "force" ]] && export LDFLAGS="${LDFLAGS// -fno-lto/}"
-	[[ "${NOLTO}" != "force" ]] && export LDFLAGS="${LDFLAGS// -fno-use-linker-plugin/}"
+	
 fi
