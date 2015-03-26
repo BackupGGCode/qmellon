@@ -9,10 +9,12 @@ fi
 
 if [[ "${EBUILD_PHASE}" == "setup" && -n "${NOLTO}" ]]; then
 	export CFLAGS="${CFLAGS// -flto/}"
-	export CFLAGS="${CFLAGS// -fno-lto/}"
+	[[ "${NOLTO}" != "force" ]] && export CFLAGS="${CFLAGS// -fno-lto/}"
+	[[ "${NOLTO}" != "force" ]] && export CFLAGS="${CFLAGS// -fno-use-linker-plugin/}"
 	export CXXFLAGS="${CFLAGS}"
 	export FCFLAGS="${CFLAGS}"
 	export FFLAGS="${CFLAGS}"
 	export LDFLAGS="${LDFLAGS// -flto/}"
-	export LDFLAGS="${LDFLAGS// -fno-lto/}"
+	[[ "${NOLTO}" != "force" ]] && export LDFLAGS="${LDFLAGS// -fno-lto/}"
+	[[ "${NOLTO}" != "force" ]] && export LDFLAGS="${LDFLAGS// -fno-use-linker-plugin/}"
 fi
