@@ -1,0 +1,18 @@
+#! /usr/bin/env bash
+
+if [[ "${EBUILD_PHASE}" == "depend" && "${PORTAGE_REPO_NAME}" != "gentoo" && "${PORTAGE_REPO_NAME}" != "local" ]]; then
+	die() {
+		eerror "$CATEGORY/$PF::$PORTAGE_REPO_NAME sez \"$*\""
+		exit 1
+	}
+fi
+
+if [[ "${EBUILD_PHASE}" == "setup" && -n "${NOLTO}" ]]; then
+	export CFLAGS="${CFLAGS// -flto/}"
+	export CFLAGS="${CFLAGS// -fno-lto/}"
+	export CXXFLAGS="${CFLAGS}"
+	export FCFLAGS="${CFLAGS}"
+	export FFLAGS="${CFLAGS}"
+	export LDFLAGS="${LDFLAGS// -flto/}"
+	export LDFLAGS="${LDFLAGS// -fno-lto/}"
+fi
